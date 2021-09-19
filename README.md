@@ -1,2 +1,2 @@
 # odin-project
-odin-projec
+https://www.theodinproject.com/
