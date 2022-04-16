@@ -45,15 +45,24 @@ function playRound(playerSelection, computerSelection) {
     }
     
     return results;
-};
+}; 
 const choice = ["rock", "paper", "scissors"];
-for (let i = 0; i < 5; i++) {
+let userBtns = document.querySelectorAll('button');
+// console.log(userBtn)
+let computerSelection = computerPlay(choice);
+// userBtn.addEventListener('click', playRound(userBtn.value, computerSelection));
+// userBtn.addEventListener('click', console.log(userBtn));
+function clickHandler(e) {
+    const playerSelection = e.target.innerHTML;
     let computerSelection = computerPlay(choice);
-    let playerSelection = window.prompt("Enter your selection: ");
     console.log(playRound(playerSelection, computerSelection));
- }
+}
+userBtns.forEach(userBtn => {
+    userBtn.addEventListener('click', clickHandler)
+});
 
-// const choice = ["Rock", "Paper", "Scissors"];
-// const computerSelection = computerPlay(choice);
-// const playerSelection = "Rock";
-// console.log(playRound(playerSelection, computerSelection));
+// for (let i = 0; i < 1; i++) {
+//     let computerSelection = computerPlay(choice);
+//     let playerSelection = window.prompt("Enter your selection: ");
+//     console.log(playRound(playerSelection, computerSelection));
+//  }
