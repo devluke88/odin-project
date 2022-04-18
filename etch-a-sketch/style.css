@@ -1,0 +1,45 @@
+h1 {
+    padding-bottom: 1em;
+}
+.center {
+    margin: auto;
+    text-align: center;
+}
+#clear {
+    
+    margin-bottom: 20px;
+    /* max-width: auto; */
+
+}
+
+button {
+    width: 200px;
+}
+
+.parent {
+    display: flex;
+    /* height: 600px; */
+    /* border: 1px solid purple; */
+    justify-content: space-between;
+    column-gap: 30px;
+    padding: 30px;
+    
+}
+
+.control-panel-container {
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+
+}
+
+.canvas-container {
+    display: grid;
+    border: 1px solid #dee2e6;
+    border-radius: 5px;
+    width: 500px;
+    height: 500px;
+    background-color: white;
+}
