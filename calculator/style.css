@@ -1,5 +1,5 @@
 .calculator-box {
-    max-width: 500px;
+    max-width: 400px;
     border-radius: 5px;
     border: 1px solid #3d3d3d;
     margin: 0 auto;
@@ -19,7 +19,7 @@
 
 .buttons-panel {
     background-color: #3d3d3d;
-    height: 500px;
+    height: 400px;
     display: grid;
     grid-template-columns: 1fr 1fr 1fr 1fr;
     grid-template-rows: 1fr 1fr 1fr 1fr 1fr;
@@ -41,6 +41,13 @@
 }
 
 .item-operate-btn:hover {
+    background-color: #ffbf66;
+}
+.item-equals-btn {
+    background-color: #ff9500;
+}
+
+.item-equals-btn:hover {
     background-color: #ffbf66;
 }
 
