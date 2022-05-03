@@ -47,6 +47,7 @@ function populateDisplay(e) {
     let clickedValue = e.target.innerHTML;
     if (displayValue == "0") {
         if (clickedValue == ".") {
+            displayScreen.innerHTML = 0;
             displayScreen.innerHTML += clickedValue;
         }
         else {
@@ -90,6 +91,9 @@ numberBtns.forEach(numberBtn => {
 let operateBtns = document.querySelectorAll('.item-operate-btn');
 operateBtns.forEach(operateBtn => {
     operateBtn.addEventListener("click", (e) => {
+        // if (displayScreen.innerHTML == "0") {
+        //     console.log("do nothing")
+        // }
         operatorValue = e.target.innerHTML;
         firstNum = displayScreen.innerHTML;
         displayValue = 0;
@@ -111,7 +115,7 @@ equalsBtn.addEventListener("click", (e) => {
     }
     displayValue = 0;
     populateDisplay(e)   
-    
+    displayValue = 0;
     // operatorValue = "";
     // firstNum = secondNum; 
 });
