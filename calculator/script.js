@@ -144,7 +144,7 @@ function sumOperation(e) {
 
 //Function allowing keyboard support
 function handleKeyboardSupport(e) {
-    if (e.key >= "1" && e.key <= "9") {
+    if (e.key >= "0" && e.key <= "9") {
         e = generateEventPayload(e.key);
         selectNumberAndUpdateDisplay(e);
     }
