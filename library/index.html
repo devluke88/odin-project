@@ -25,6 +25,34 @@
         <p>Add your Book.</p>
         <button class="btn add-new-book">+ New Book</button>
       </div>
+      <!-- The Modal -->
+      <div id="myModal" class="modal">
+        <!-- Modal content -->
+        <div class="modal-content">
+          <div class="modal-form">
+            <div class="close">&times;</div>
+            <div class="modal-header">
+              Add your Book.
+            </div>
+            <form class="modal-form" onsubmit="alert('Test')">
+              <input class="modal-title" type="text" name="modal-title" placeholder="Title">
+              <input type="text" name="modal-author" placeholder="Author">
+              <input type="text" name="modal-pages" placeholder="Pages">
+              <div class="modal-checkbox">
+                <input type="checkbox" id="read" name="read">
+                <label for="read">Read?</label>
+              </div>
+              <input class="btn submit" type="submit" value="Submit">
+            </form>
+            <div class="modal-title">
+
+            </div>
+          </div>
+          
+          
+        </div>
+
+      </div>
       <div class="cards">
         <!-- <div class="card">
           <div class="title">LOTR</div>

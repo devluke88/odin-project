@@ -19,4 +19,25 @@ function displayBook() {
     }
 }
 
+function openModal() {
+    modal.style.display = "block";
+};
+
+function closeModal() {
+    modal.style.display = "none";
+};
+
 //TODO-4: Add a “NEW BOOK” button that brings up a form allowing users to input the details for the new book: author, title, number of pages, whether it’s been read and anything else you might want.
+const modal = document.querySelector(".modal");
+const addNewBook = document.querySelector(".add-new-book");
+addNewBook.addEventListener("click", openModal)
+const closeBtn = document.querySelector(".close");
+closeBtn.addEventListener("click", closeModal);
+// const submitBtn = document.querySelector(".submit");
+// submitBtn.addEventListener("click", alert("Test"));
+
+window.onclick = function(event) {
+    if (event.target == modal) {
+      modal.style.display = "none";
+    }
+  }
