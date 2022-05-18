@@ -1,4 +1,4 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
   <head>
     <!-- Required meta tags -->
@@ -11,6 +11,8 @@
     <title>Library</title>
   </head>
   <body>
+
+    <!-- Nav section -->
     <div class="nav">
       <div class="left">
         Book Library
@@ -20,6 +22,8 @@
         <li class="btn btn-nav"><a href="#">Sign in</a></li>
       </ul>
     </div>
+
+    <!-- Container with Library section -->
     <div class="container">
       <div class="adder">
         <p>Add your Book.</p>
@@ -34,58 +38,23 @@
             <div class="modal-header">
               Add your Book.
             </div>
-            <form class="modal-form" onsubmit="alert('Test')">
-              <input class="modal-title" type="text" name="modal-title" placeholder="Title">
-              <input type="text" name="modal-author" placeholder="Author">
-              <input type="text" name="modal-pages" placeholder="Pages">
-              <div class="modal-checkbox">
-                <input type="checkbox" id="read" name="read">
-                <label for="read">Read?</label>
-              </div>
-              <input class="btn submit" type="submit" value="Submit">
+            <form class="modal-form" action="#">
+              <input class="modal-title" type="text" name="title" placeholder="Title" />
+              <input class="modal-author" type="text" name="author" placeholder="Author" />
+              <input class="modal-pages" type="number" name="pages" placeholder="Pages" />
+              <div><input class="modal-checkbox" type="checkbox" id="read" name="read"> Read?</div>
+              <button type="button" class="btn submit">Submit</button>
             </form>
             <div class="modal-title">
-
             </div>
           </div>
-          
-          
         </div>
-
       </div>
-      <div class="cards">
-        <!-- <div class="card">
-          <div class="title">LOTR</div>
-          <div class="author">J.R.R. Tolkien</div>
-          <div class="pages">1005</div>
-          <div class="btn read">Read</div>
-          <div class="btn remove">Remove</div>
-        </div> -->
-        <!-- <div class="card">
-          <div class="title">LOTR</div>
-          <div class="author">J.R.R. Tolkien</div>
-          <div class="pages">1005</div>
-          <div class="btn not-read">Not Read</div>
-          <div class="btn remove">Remove</div>
-        </div> -->
-        <!-- <div class="card">
-          <div class="title">LOTR</div>
-          <div class="author">J.R.R. Tolkien</div>
-          <div class="pages">1005</div>
-          <div class="btn not-read">Not Read</div>
-          <div class="btn remove">Remove</div>
-        </div> -->
-        <!-- <div class="card">
-          <div class="title">LOTR</div>
-          <div class="author">J.R.R. Tolkien</div>
-          <div class="pages">1005</div>
-          <div class="btn not-read">Not Read</div>
-          <div class="btn remove">Remove</div>
-        </div> -->
-
-      </div>
+      <!-- Cards -->
+      <div class="cards"></div>
     </div>
 
+    <!-- Footer -->
     <div class="footer">
       Copyright © Lukasz 2022
     </div>
