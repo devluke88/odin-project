@@ -3,6 +3,7 @@
     --purple-light: rgb(191, 90, 242);
     --white: #f9faf8;
     --indigo: rgb(94, 92, 230);
+    --blue: rgb(90, 200, 245);
 }
 
 body {
@@ -66,6 +67,10 @@ h1 {
 .restart {
     align-self: center;
     justify-self: end;
+}
+
+.btn:hover {
+    background-color: var(--blue);
 }
 
 .btn-restart {
