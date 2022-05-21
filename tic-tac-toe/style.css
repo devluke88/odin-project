@@ -68,14 +68,14 @@ h1 {
     justify-self: end;
 }
 
-.btn {
+.btn-restart {
     padding: 10px 10px;
     background-color: var(--purple-light);
     color: var(--white);
     font-weight: 600;
 }
 
-.btn:hover {
+.btn-restart:hover {
     background-color: var(--purple);
     color: var(--white);
 }
