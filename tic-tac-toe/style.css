@@ -44,23 +44,26 @@ h1 {
     align-items: stretch;
 }
 
+.btn {
+    border-radius: 0rem;
+    border: none;
+    padding: 0;
+    margin: 0;
+}
+
+.btn:hover {
+    background-color: var(--blue);
+}
+
 .tile {
     flex: 1 1 100px;
+    height: 110px;
     display: flex;
     justify-content: center;
     align-items: center;
     font-size: 60px;
     font-weight: 700;
     color: var(--purple-light);
-}
-
-.btn {
-    border-radius: 0rem;
-    border: none;
-}
-
-.btn:hover {
-    background-color: var(--blue);
 }
 
 .vertical {
@@ -98,4 +101,31 @@ h1 {
     background-color: var(--indigo);
     color: var(--white);
     font-weight: 600;
+    margin-top: 30px;
+}
+
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    padding-top: 100px; /* Location of the box */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+/* Modal Content */
+.modal-content {
+    background-color: #fefefe;
+    margin: auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 30%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 }
