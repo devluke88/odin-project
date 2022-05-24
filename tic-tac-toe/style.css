@@ -1,0 +1,136 @@
+:root {
+    --purple: rgb(175, 82, 222);
+    --purple-light: rgb(191, 90, 242);
+    --white: #f9faf8;
+    --indigo: rgb(94, 92, 230);
+    --blue: rgb(90, 200, 245);
+}
+
+body {
+    height: 100vh;
+    display: flex;
+    background-color: var(--white);
+    flex-direction: column;
+    justify-content: space-between;  
+}
+
+.title {
+    display: flex;
+    justify-content: center;
+    padding: 10px;
+    background-color: var(--purple-light);
+    color: var(--white);
+}
+
+h1 {
+    font-weight: 900;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 30px;
+    justify-content: space-between;
+
+}
+
+.gameboard {
+    width: 330px;
+    height: 330px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: stretch;
+    align-items: stretch;
+}
+
+.btn {
+    border-radius: 0rem;
+    border: none;
+    padding: 0;
+    margin: 0;
+}
+
+.btn:hover {
+    background-color: var(--blue);
+}
+
+.tile {
+    flex: 1 1 100px;
+    height: 110px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 60px;
+    font-weight: 700;
+    color: var(--purple-light);
+}
+
+.vertical {
+    border-left: 5px solid var(--indigo);
+    border-right: 5px solid var(--indigo);
+  }
+
+.horizontal {
+    border-top: 5px solid var(--indigo);
+    border-bottom: 5px solid var(--indigo);
+  }
+
+.restart {
+    align-self: center;
+    justify-self: end;
+}
+
+.btn-restart {
+    padding: 10px 10px;
+    background-color: var(--purple-light);
+    color: var(--white);
+    font-weight: 600;
+}
+
+.btn-restart:hover {
+    background-color: var(--purple);
+    color: var(--white);
+}
+
+.footer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    background-color: var(--indigo);
+    color: var(--white);
+    font-weight: 600;
+    margin-top: 30px;
+}
+
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    padding-top: 100px; /* Location of the box */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+/* Modal Content */
+.modal-content {
+    background-color: #fefefe;
+    margin: auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 30%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.btn-disable {
+    cursor: not-allowed;
+    pointer-events: none;
+}
