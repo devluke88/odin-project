@@ -2,16 +2,28 @@ const Player = (name, mark) => {
     return {name, mark};
 }
 
-let gameBoard = (function () {
+const gameBoard = (function () {
     let gameboard = [];
-    let running = 0;
+    let running = 1;
     let notUsedFields = ["1", "2", "3", "4", "5", "6", "7", "8", "9"];
+    let board = [
+        [1, 2, 3],
+        [4, 5, 6],
+        [7, 8, 9],
+        [1, 4, 7],
+        [2, 5, 8],
+        [3, 6, 9],
+        [1, 5, 9],
+        [3, 5, 7]
+    ];
     let opponentTurn = false;
-    const selectField = function (value, player) {
+
+    const selectField = function (value, player, enemy) {
+        disableEnableClick(running);
+        running++
         let field = null;
         opponentTurn = false;
         if (typeof value != 'string' && typeof value != "number") {
-            console.log(`Value of target ${value}`)
             field = value.target.dataset.index;   
         }
         else {
@@ -19,9 +31,9 @@ let gameBoard = (function () {
         }
         if (gameboard.length > 0) {
             for (let obj of gameboard) {
-                console.log(`Object in gameboard: ${obj[0]}`)
-                console.log(`Field: ${obj}`)
                 if (obj["num"] == field) {
+                    disableEnableClick(running);
+                    running++;
                     return displayController.updateBoardText("Field already used, please select a new one that has not been used...");
                 }
             };
@@ -33,17 +45,13 @@ let gameBoard = (function () {
             mark: playerMark
         };
         gameboard.push(choice);
-        console.log("=========")
-        console.log(`Choice is: ${choice.num}, ${choice.mark}`);
-        console.log(`Index: ${notUsedFields.indexOf(choice.num)}`)
         notUsedFields.splice(notUsedFields.indexOf(choice.num), 1);
-        console.log(`Field not in use: ${notUsedFields}`);
-        console.log("=========")
         displayController.updateTile(field, playerMark);
-        if (gameboard.length >= 9) {
-            displayController.announceWinner("Test");
+        if (gameboard.length != 9) {
+            opponentTurn = true;
         }
-        opponentTurn = true;
+        isGameOver(board);
+        displayController.updateBoardText(`Player ${enemy.name}'s turn.`)
     };
 
     const enemyField = function () {
@@ -57,29 +65,43 @@ let gameBoard = (function () {
     };
 
     const roundMove = function (e, player1, player2) {
-        if (gameBoard.running != 1) {
-            gameBoard.running = 1;
-            selectField(e, player1);
-            if (opponentTurn) {
-                setTimeout(function(){
-                    selectField(enemyField(), player2);
-                }, 1000); 
-            }; 
-            gameBoard.running = 0;
-        };
-        
+        selectField(e, player1, player2);
+        if (opponentTurn) {
+            setTimeout(function(){
+                selectField(enemyField(), player2, player1);
+            }, 1000); 
+        }; 
     };
 
-    const disableClick = function () {
-        //disable the button
-        let btnTiles = document.querySelectorAll(".tile");
-        btnTiles.forEach(btnTile => {btnTile.disabled = true;
-        });
+    const isGameOver = function (board) {
+        for (let lista of board) {
+            let result = "";
+            for (let element of lista) {
+                let tile = document.querySelector(`[data-index='${element}']`);
+                result += tile.innerHTML;   
+            };
+            if (result === "XXX") {
+                // winner is human
+                displayController.announceWinner("Human");
+                break;
+            }
+            else if (result === "OOO") {
+                displayController.announceWinner("Computer");
+                break;
+            }
+        };
     }
 
-    const enableClick = function () {
+    let disableEnableClick = function (value) {
+        // disable the button
         let btnTiles = document.querySelectorAll(".tile");
-        btnTiles.forEach(btnTile => {btnTile.disabled = false;
+        btnTiles.forEach(btnTile => {
+            if (value % 2 !== 0) {
+                btnTile.classList.add("btn-disable");
+            }
+            else if (value % 2 === 0) {
+                btnTile.classList.remove("btn-disable");
+            }
         });
     }
 
@@ -88,17 +110,19 @@ let gameBoard = (function () {
 
 let displayController = (function () {
     
+    // Update the game display
     const updateBoardText = function (text) {
         let boardText = document.querySelector('.game-display');
         boardText.innerHTML = text;
     };
+
+    //Update field selected by the player
     let updateTile = function (tileNumber, tileValue) {
         let tileToUpdate = document.querySelector(`[data-index='${tileNumber}']`);
-        console.log(`Tile no: ${tileNumber}`);
-        console.log(`Tile val: ${tileValue}`);
-        console.log(`Tile to update: ${tileToUpdate}`)
         tileToUpdate.innerHTML = tileValue;
     };
+
+    // Open Modal and announce winner
     let announceWinner = function(winner) {
         const modal = document.querySelector(".modal");
         openModal(modal);
@@ -111,20 +135,22 @@ let displayController = (function () {
         modal.style.display = "block";
     };
 
-// Close Form when adding the Book
-    function closeModal(modal) {
-        modal.style.display = "none";
+    // Reload page, restart game
+    function reloadPage() {
+        window.location.reload();
     };
-    return {updateBoardText, updateTile, announceWinner}
-})();
 
-//gameBoard, displayController
+    return {updateBoardText, updateTile, announceWinner, reloadPage}
+})();
 
 const human = Player("Human", "X");
 const ai = Player("AI", "O");
-let tileBtns = document.querySelectorAll('.tile');
+let tileBtns = document.querySelectorAll(".tile");
 tileBtns.forEach(tileBtn => {
     tileBtn.addEventListener("click", function(e){
         gameBoard.roundMove(e, human, ai);
     });
 });
+
+const restartBtn = document.querySelector(".btn-restart");
+restartBtn.addEventListener("click", displayController.reloadPage);

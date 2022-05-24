@@ -129,3 +129,8 @@ h1 {
     flex-direction: column;
     justify-content: space-between;
 }
+
+.btn-disable {
+    cursor: not-allowed;
+    pointer-events: none;
+}
