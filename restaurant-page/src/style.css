@@ -46,7 +46,7 @@ width: 100%;
   align-items: center;
 }
 
-.left {
+.logo {
   align-self: flex-start;
   font-size: 24px;
   font-weight: 700;
