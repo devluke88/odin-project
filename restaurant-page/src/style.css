@@ -81,6 +81,8 @@ li a:hover {
 #hero {
   margin-top: 60px;
   background-color: var(--dark-green);
+  display: flex;
+  justify-content: center;
 }
 
 .hero-main {
@@ -89,6 +91,7 @@ li a:hover {
   align-items: center;
   padding-top: 50px;
   padding-bottom: 100px;
+  max-width: 980px;
 }
 
 .hero-header {
@@ -220,7 +223,8 @@ li a:hover {
 #about {
   margin-top: 60px;
   background-color: var(--green);
-
+  display: flex;
+  justify-content: center;
 }
 
 .about-main {
@@ -229,6 +233,7 @@ li a:hover {
   align-items: center;
   padding-top: 50px;
   padding-bottom: 100px;
+  max-width: 980px;
 }
 
 .about-header {

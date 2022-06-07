@@ -1,8 +1,6 @@
 // About Section
-
 import { addImage } from './imageGenerator'
 
-// Hero module
 const aboutModule = (image, aboutHeaderText, aboutSecText) => {
     const about = document.createElement('div');
     about.id = 'about';
