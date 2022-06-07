@@ -13,6 +13,7 @@ import Pizza8 from './pizza8.jpg';
 // import modules
 import { navModule } from './navbar';
 import { heroModule } from './hero';
+import { aboutModule } from './about';
 
 const cardImagesList = [Pizza1, Pizza2, Pizza3, Pizza4, Pizza5, Pizza6, Pizza7, Pizza8]
 
@@ -38,15 +39,11 @@ content.append(navbar);
 // content.insertBefore(navbar, content.firstChild);
 
 // Hero Section
-// Add Hero Image
-// const herroImage = document.querySelector('.hero-image');
 const heroHeaderText = 'Best Pizza!';
 const heroSecText = 'We serve the best Neapolitan pizza accross the whole UK. All of our dough is made from fresh ingredients on the daily basis. Source of all goodness is Italy that offer the best food in the world. The best crust you will ever try.';
 const buttonText = 'Try Now';
 const hero = heroModule(heroHeaderText, heroSecText, buttonText, MainImage);
 content.append(hero);
-// content.insertBefore(hero, content.nthChild(2));
-// herroImage.appendChild(addImage(MainImage));
 
 // Add Menu Images
 const cardImages = document.querySelectorAll('.card-image');
@@ -57,9 +54,13 @@ cardImages.forEach((cardImage) => {
     count++;
 });
 
-// Add About Image
-const aboutImage = document.querySelector('.about-image');
-aboutImage.appendChild(addImage(AboutImage));
+// About Section
+const aboutHeaderText = 'About us';
+const aboutSecText = 'We are small Italian family, owning ten restaurants accross the UK. We serve our community by delivering the best food in the World! We started this business to share the love and spread the kindnest by serving other people. We welcome everyone in our place. Do not hesitate to visit us!';
+const about = aboutModule(AboutImage, aboutHeaderText, aboutSecText);
+content.append(about);
+// const aboutImage = document.querySelector('.about-image');
+// aboutImage.appendChild(addImage(AboutImage));
 
 // Contact Section
 function submitForm(e) {
