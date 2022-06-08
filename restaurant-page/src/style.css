@@ -10,7 +10,6 @@ body {
   height: 100vh;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
   margin: 0px;
   background-color: var(--white);
 }
@@ -29,7 +28,7 @@ body {
 /* Nav Section */
 #navbar {
 display: flex;
-position: fixed; 
+/* position: fixed;  */
 flex-direction: column;
 justify-content: center;
 width: 100%;
@@ -79,7 +78,7 @@ li a:hover {
 
 /* Hero Section */
 #hero {
-  margin-top: 60px;
+  /* margin-top: 60px; */
   background-color: var(--dark-green);
   display: flex;
   justify-content: center;
@@ -143,10 +142,10 @@ li a:hover {
 #menu {
   display: flex;
   flex-direction: column;
-  justify-items: center;
-  align-items: center;
+  justify-items: stretch;
+  /* align-items: center; */
   flex: 1 1 auto;
-  margin-bottom: 100px;
+  /* margin-bottom: 100px; */
   background-color: var(--white);
 }
 
@@ -221,7 +220,7 @@ li a:hover {
 
 /* About Section */
 #about {
-  margin-top: 60px;
+  /* margin-top: 60px; */
   background-color: var(--green);
   display: flex;
   justify-content: center;
