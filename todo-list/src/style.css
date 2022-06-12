@@ -1,0 +1,44 @@
+/* https://developer.apple.com/design/human-interface-guidelines/foundations/color/ */
+:root {
+  --dark-grey: #3A3A3C;
+  --grey: #8E8E93;
+  --light-grey: #f2f5f7;
+  --another-gray: #dee2e6;
+  --ligt-yellow: #fff4e6;
+  --white: #fff;
+  --red: #FF3B30;
+  --orange: #FF9500;
+  --green: #28CD41;
+  --purple: #BF5AF2;
+  --dark-purple: #b23bed;
+}
+  
+*, ::after, ::before {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Arial', 'Helvetica', sans-serif;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  margin: 0px;
+  background-color: var(--ligt-yellow);
+}
+
+h1 {
+    color: var(--dark-grey);
+}
+
+.container {
+  background-color: var(--light-grey);
+  max-width: 1140px;
+  margin-right: auto;
+  margin-left: auto;
+  border-radius: 0.3rem;
+  padding: 20px;
+  margin-top: 50px;
+  height: 800px;
+  box-shadow: 0 .125rem .25rem rgba(0,0,0,.075);
+  border: 1px solid var(--another-gray);
+}
