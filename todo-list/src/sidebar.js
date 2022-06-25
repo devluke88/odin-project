@@ -16,8 +16,8 @@ const sidebarModule = (components) => {
 
     for (let component of components) {
         let li = document.createElement('li');
-        li.className = `list-item sidebar-${component['name'].toLowerCase()}`
-        let newChild = `<a href="#${component.name.toLowerCase()} class="list-item sidebar-${component['name'].toLowerCase()}><i class="${component['icon']}"></i><span class="sidebar-element">${component['name']}</span></a>`;
+        // li.className = `sidebar-${component['name'].toLowerCase()}`;
+        let newChild = `<a href="#${component.name.toLowerCase()} class="list-item><i class="${component['icon']}"></i><span class="sidebar-element">${component['name']}</span></a>`;
         li.innerHTML = newChild;
         ul.appendChild(li);
     };

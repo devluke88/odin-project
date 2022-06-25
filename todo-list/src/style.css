@@ -177,7 +177,7 @@ li a:hover {
   }
   .nav, 
   #main,
-  .sidebar,
+  #sidebar,
   .footer {
     grid-column: 1 / -1 !important;
     grid-row: auto !important;
