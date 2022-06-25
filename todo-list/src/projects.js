@@ -1,2 +1,2 @@
 
-let projects = [];
+let projects = ['Inbox'];
