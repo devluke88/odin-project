@@ -9,52 +9,74 @@ let todoList = [];
 // Your todo list should have projects or separate lists of todos. When a user first opens the app, there should be some sort of ‘default’ project to which all of their todos are put. Users should be able to create new projects and choose which project their todos go into.
 
 // Function to display given selected section
-// function getSection(e) {
-//     e.preventDefault();
-//     const clickedBtn = e.target.textContent.toLowerCase()
-//     if (clickedBtn !== 'home') {
-//         const element = document.getElementById(clickedBtn);
-//         for (let i = 0; i < componentsList.length; i++) {
-//             componentsList[i].style.display = 'none';
-//         }
-//         element.style.display = 'flex';
-//         element.style.flex = '1 1 auto';
-//         element.style.justifyContent = 'center';
-//     }
-//     else {
-//         window.location.reload();
-//     }
-// };
+function getSection(e) {
+    e.preventDefault();
+    const clickedBtn = e.target.textContent.toLowerCase();
+    if (clickedBtn != 'projects') {
+        // Action dedicated for any button apart og 'Projects'
+        const element = document.getElementById(clickedBtn);
+        for (let i = 0; i < componentsList.length; i++) {
+            let searchedComponent = componentsList[i].name.toLowerCase();
+            if (searchedComponent != clickedBtn) {
+                if (searchedComponent != 'projects') {
+                    const component = document.getElementById(componentsList[i].name.toLowerCase());
+                    component.style.display = 'none';
+                }
+            }
+            else {
+                element.style.display = 'flex';
+                element.style.flexDirection = 'column';
+            }
+        }
+    }
+    else {
+        // Action dedicated once 'Projects' button has been clicked
+        console.log(`Hello Projects Button!`)
+    }   
+};
 
 //Function to restart the page
-// function takeMeHome(e) {
-//     e.preventDefault();
-//     window.location.reload();
-// }
+function takeMeHome(e) {
+    e.preventDefault();
+    window.location.reload();
+}
 
 // Array with sidebar menu components
+// const componentsList = [
+//     {name: 'Inbox', icon: 'fa-solid fa-inbox', componentELement: inboxSection.style},
+//     {name: 'All', icon: 'fa-solid fa-list',componentELement: allSection.style},
+//     {name: 'Today', icon: 'fa-solid fa-calendar-day',componentELement: todaySection.style},
+//     {name: 'Projects', icon: 'fa-solid fa-code-branch', componentELement: ""},
+//     {name: 'Completed', icon: 'fa-solid fa-circle-check', componentELement: completedSection.style}
+// ]
+
 const componentsList = [
-    {name: 'Inbox', icon: 'fa-solid fa-inbox' },
-    {name: 'All', icon: 'fa-solid fa-list' },
-    {name: 'Today', icon: 'fa-solid fa-calendar-day' },
-    {name: 'Projects', icon: 'fa-solid fa-code-branch' },
-    {name: 'Completed', icon: 'fa-solid fa-circle-check' }
+    {name: 'Inbox', icon: 'fa-solid fa-inbox'},
+    {name: 'All', icon: 'fa-solid fa-list'},
+    {name: 'Today', icon: 'fa-solid fa-calendar-day'},
+    {name: 'Projects', icon: 'fa-solid fa-code-branch'},
+    {name: 'Completed', icon: 'fa-solid fa-circle-check'}
 ]
-// Start here - read wrap element
+
+// Wrapper element, everything starts here
 const wrapElement = document.querySelector('.wrap');
 
 
-// SIDEBAR SECTION
+// NAV SECTION
+const navbar = document.createElement('div');
+navbar.className = 'nav';
+navbar.innerHTML = '<a href="#"><div class="fa-solid fa-check-double"></div><span class="nav-logo">todoList</span></a>'
+wrapElement.append(navbar);
 
-// const sidebar = navModule('Luca', 'Home', 'Menu', 'About', 'Contact');
+// SIDEBAR SECTION
 const sidebar = sidebarModule(componentsList);
 wrapElement.append(sidebar);
-
 // Sidebar element event listener
-// const lis = document.querySelectorAll('li');
-// lis.forEach(li =>{
-//     li.addEventListener('click', getSection)
-// });
+const lis = document.querySelectorAll('li');
+lis.forEach(li =>{
+    li.addEventListener('click', getSection)
+});
+
 
 // MAIN SECTION
 const mainSection = document.createElement('div');
@@ -77,14 +99,14 @@ contentElement.append(todaySection);
 const completedSection = projectModule('Completed', 'fa-solid fa-circle-check', true);
 completedSection.style.display = 'none';
 contentElement.append(completedSection);
+// Projects Section
+// Add functionality to Projects button to display different projects, add dummy one
 
 mainSection.append(contentElement)
 wrapElement.append(mainSection);
 
-// Projects Section
-// Add functionality to Projects button to display different projects, add dummy one
 
-// Footer Section
+// FOOTER SECTION
 const footerSection = document.createElement('footer');
 footerSection.className = 'footer';
 footerSection.innerHTML = 'Copyright © Lukasz 2022 <a href="#"><i class="fa-brands fa-github footer-icon"></i></a>'
