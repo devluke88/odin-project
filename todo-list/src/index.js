@@ -1,6 +1,7 @@
 import './style.css';
 import { projectModule } from './project'
 import { sidebarModule } from './sidebar'
+import { navbarModule } from './navbar'
 
 
 let todoList = [];
@@ -42,14 +43,6 @@ function takeMeHome(e) {
 }
 
 // Array with sidebar menu components
-// const componentsList = [
-//     {name: 'Inbox', icon: 'fa-solid fa-inbox', componentELement: inboxSection.style},
-//     {name: 'All', icon: 'fa-solid fa-list',componentELement: allSection.style},
-//     {name: 'Today', icon: 'fa-solid fa-calendar-day',componentELement: todaySection.style},
-//     {name: 'Projects', icon: 'fa-solid fa-code-branch', componentELement: ""},
-//     {name: 'Completed', icon: 'fa-solid fa-circle-check', componentELement: completedSection.style}
-// ]
-
 const componentsList = [
     {name: 'Inbox', icon: 'fa-solid fa-inbox'},
     {name: 'All', icon: 'fa-solid fa-list'},
@@ -63,10 +56,15 @@ const wrapElement = document.querySelector('.wrap');
 
 
 // NAV SECTION
-const navbar = document.createElement('div');
-navbar.className = 'nav';
-navbar.innerHTML = '<a href="#"><div class="fa-solid fa-check-double"></div><span class="nav-logo">todoList</span></a>'
+const logoIcon = 'fa-solid fa-check-double';
+const logoText = 'todoList';
+const navbar = navbarModule(logoIcon, logoText)
 wrapElement.append(navbar);
+// Reload page when clicked on logo
+const logoElement = document.querySelector('.logo-element')
+logoElement.addEventListener('click', takeMeHome)
+
+
 
 // SIDEBAR SECTION
 const sidebar = sidebarModule(componentsList);

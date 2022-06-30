@@ -52,13 +52,14 @@ body {
   padding-left: 10px;
 }
 
-.nav a {
+.logo-element {
   text-decoration: none;
   color: var(--white);
 }
 
-.nav a:hover { 
+.logo-element:hover { 
   color: var(--light-grey);
+  cursor: pointer;
 }
 
 
