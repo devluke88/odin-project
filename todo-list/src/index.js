@@ -47,7 +47,7 @@ const componentsList = [
     {name: 'Inbox', icon: 'fa-solid fa-inbox'},
     {name: 'All', icon: 'fa-solid fa-list'},
     {name: 'Today', icon: 'fa-solid fa-calendar-day'},
-    {name: 'Projects', icon: 'fa-solid fa-code-branch'},
+    // {name: 'Projects', icon: 'fa-solid fa-code-branch'},
     {name: 'Completed', icon: 'fa-solid fa-circle-check'}
 ]
 
@@ -67,8 +67,60 @@ logoElement.addEventListener('click', takeMeHome)
 
 
 // SIDEBAR SECTION
+
+function openProjects() {
+    console.log('Opened!');
+    this.classList.toggle("active");
+    var content = this.nextElementSibling;
+    if (content.style.display === "block") {
+      content.style.display = "none";
+    } else {
+      content.style.display = "block";
+    }
+}
+
+let projectsList = ['Inbox', 'Completed'];
+
 const sidebar = sidebarModule(componentsList);
 wrapElement.append(sidebar);
+
+const sidebarMenu  = document.querySelector('#sidebar');
+// Projects button
+const projectsBtn = document.createElement('button');
+projectsBtn.className = 'sidebar-element2 collapsible';
+const projectsIcon = document.createElement('i');
+projectsIcon.className = 'fa-solid fa-code-branch';
+projectsBtn.appendChild(projectsIcon);
+const projectsTxt = document.createElement('span');
+projectsTxt.className = 'sidebar-element';
+projectsTxt.textContent = 'Projects';
+projectsBtn.appendChild(projectsTxt)
+sidebarMenu.append(projectsBtn)
+
+const projectsElements = document.createElement('div');
+projectsElements.className = 'collapsible-content';
+projectsElements.style.display = "block";
+sidebarMenu.append(projectsElements);
+const customProjectBtn = document.createElement('button');
+customProjectBtn.className = 'custom-project';
+const customProjectIcon = document.createElement('i');
+customProjectIcon.className = 'fa-solid fa-circle';
+customProjectIcon.style.color = `#${Math.floor(Math.random()*16777215).toString(16)}`
+const customProjectTxt = document.createElement('span');
+customProjectTxt.className = 'sidebar-element';
+customProjectTxt.textContent = 'Test';
+customProjectBtn.appendChild(customProjectIcon);
+customProjectBtn.appendChild(customProjectTxt);
+projectsElements.append(customProjectBtn);
+
+projectsBtn.addEventListener('click', openProjects)
+
+// Add new element to the project list
+// Add new element to the sidebar list
+
+
+
+
 // Sidebar element event listener
 const lis = document.querySelectorAll('li');
 lis.forEach(li =>{

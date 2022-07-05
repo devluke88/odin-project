@@ -63,6 +63,63 @@ body {
 }
 
 
+
+.collapsible {
+  background-color: var(--light-grey);
+  color: var(--dark-grey);
+  cursor: pointer;
+  padding: 16px;
+  width: 100%;
+  border: none;
+  text-align: left;
+  outline: none;
+  font-size: 18px;
+}
+
+.active, .collapsible:hover {
+  background-color: var(--another-gray);
+  border-radius: 0.25rem;
+  cursor: pointer;
+  color: var(--dark-purple);
+}
+
+.collapsible-content {
+  margin: 10px 0px 18px 10px;
+  overflow: hidden;
+  background-color: #f1f1f1;
+}
+
+.collapsible:after {
+  content: "\02C4";
+  color: var(--dark-grey);
+  /* font-weight: bold; */
+  float: right;
+  margin-left: 5px;
+}
+
+.active:after {
+  content: '\02C5';
+}
+
+.custom-project {
+  background-color: var(--light-grey);
+  color: var(--dark-grey);
+  cursor: pointer;
+  padding: 14px;
+  width: 100%;
+  border: none;
+  text-align: left;
+  outline: none;
+  font-size: 15px;
+}
+
+.active, .custom-project:hover {
+  background-color: var(--another-gray);
+  border-radius: 0.25rem;
+  cursor: pointer;
+  color: var(--dark-purple);
+}
+
 /* MAIN */
 #main {
   grid-column: 2 / 3;
