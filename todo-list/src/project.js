@@ -35,4 +35,9 @@ const projectModule = (projectName, projectIcon='none', task=true) => {
     return element;
 };
 
+
+const addNewCustomProject = (customPojectName) => {
+    const project = document.createElement('div');
+}
+
 export { projectModule };
