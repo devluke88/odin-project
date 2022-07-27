@@ -2,7 +2,7 @@ import './style.css';
 import { projectModule } from './project'
 import { sidebarModule } from './sidebar'
 import { navbarModule } from './navbar'
-
+import { modalModule } from './modal'
 
 let todoList = [];
 
@@ -124,11 +124,16 @@ addCustomProjectText.textContent = 'Add Project';
 addProjectBtn.appendChild(addCustomProjectText);
 projectsElements.append(addProjectBtn);
 
-// Add Project modal
+
+
+// Add Project modal - CONTINUE!!!!!!!!!!!!
+const test = modalModule('project-modal')
 const addProjectModal = document.createElement('div');
 addProjectModal.id = 'project-modal';
+
 const addProjectModalContent = document.createElement('div');
 addProjectModalContent.className = 'modal-content';
+
 // addProjectModalContent.style.display = 'flex';
 // addProjectModalContent.style.flexDirection = 'column';
 addProjectModal.appendChild(addProjectModalContent);
@@ -142,10 +147,12 @@ function closeWindow() {
     modal.style.display = "none";
 }
 closeBtn.addEventListener('click', closeWindow);
+
 // Text Content
-const addProjectModalHeader = document.createElement('p');
-addProjectModalHeader.className = 'add-project-modal-header';
-addProjectModalHeader.textContent = 'Provide a new project name.'
+// const addProjectModalHeader = document.createElement('p');
+// addProjectModalHeader.className = 'add-project-modal-header';
+// addProjectModalHeader.textContent = 'Provide a new project name.'
+
 // Form
 const addProjectModalForm = document.createElement('form');
 addProjectModalForm.className = 'add-project-modal-form';
@@ -154,6 +161,8 @@ const addProjectModalLabel = document.createElement('label');
 addProjectModalLabel.for = 'project-name';
 addProjectModalLabel.textContent = "Project Name";
 addProjectModalForm.appendChild(addProjectModalLabel);
+addProjectModalForm.style.display = 'flex';
+addProjectModalForm.style.flexDirection = 'column';
 // Input textbox
 const addProjectModalInput = document.createElement('input');
 addProjectModalInput.type = 'text';
@@ -167,12 +176,14 @@ addProjectModalSubmitBtn.type = 'submit';
 addProjectModalSubmitBtn.value = 'Add';
 addProjectModalForm.appendChild(addProjectModalSubmitBtn);
 addProjectModalContent.appendChild(addProjectModalForm)
+
 // Modal functionality
 // Get the modal
 function showProjectModal() {
     const modal = document.querySelector('#project-modal')
     modal.style.display = "block";
 }
+
 // var modal = document.getElementById("project-modal");
 addProjectBtn.addEventListener('click', showProjectModal)
 // // Get the button that opens the modal
