@@ -127,55 +127,58 @@ projectsElements.append(addProjectBtn);
 
 
 // Add Project modal - CONTINUE!!!!!!!!!!!!
-const test = modalModule('project-modal')
-const addProjectModal = document.createElement('div');
-addProjectModal.id = 'project-modal';
+// const test = modalModule('project-modal')
+// const addProjectModal = document.createElement('div');
+// addProjectModal.id = 'project-modal';
 
-const addProjectModalContent = document.createElement('div');
-addProjectModalContent.className = 'modal-content';
+// const addProjectModalContent = document.createElement('div');
+// addProjectModalContent.className = 'modal-content';
 
 // addProjectModalContent.style.display = 'flex';
 // addProjectModalContent.style.flexDirection = 'column';
-addProjectModal.appendChild(addProjectModalContent);
+// addProjectModal.appendChild(addProjectModalContent);
 // Close Button
-const closeBtn = document.createElement('span');
-closeBtn.className = 'close-button';
-closeBtn.innerHTML = '&times';
-addProjectModalContent.appendChild(closeBtn)
+// const closeBtn = document.createElement('span');
+// closeBtn.className = 'close-button';
+// closeBtn.innerHTML = '&times';
+// addProjectModalContent.appendChild(closeBtn)
 function closeWindow() {
     const modal = document.querySelector('#project-modal');
     modal.style.display = "none";
 }
-closeBtn.addEventListener('click', closeWindow);
+
+const projectModal = modalModule('project', 'Project Name');
+wrapElement.append(projectModal);
+
 
 // Text Content
 // const addProjectModalHeader = document.createElement('p');
 // addProjectModalHeader.className = 'add-project-modal-header';
 // addProjectModalHeader.textContent = 'Provide a new project name.'
 
-// Form
-const addProjectModalForm = document.createElement('form');
-addProjectModalForm.className = 'add-project-modal-form';
-// Label
-const addProjectModalLabel = document.createElement('label');
-addProjectModalLabel.for = 'project-name';
-addProjectModalLabel.textContent = "Project Name";
-addProjectModalForm.appendChild(addProjectModalLabel);
-addProjectModalForm.style.display = 'flex';
-addProjectModalForm.style.flexDirection = 'column';
-// Input textbox
-const addProjectModalInput = document.createElement('input');
-addProjectModalInput.type = 'text';
-addProjectModalInput.id = 'project-name';
-addProjectModalInput.name = 'project-name';
-addProjectModalInput.placeholder = 'Your Project';
-addProjectModalForm.appendChild(addProjectModalInput);
-// Add/submit Button
-const addProjectModalSubmitBtn = document.createElement('input');
-addProjectModalSubmitBtn.type = 'submit';
-addProjectModalSubmitBtn.value = 'Add';
-addProjectModalForm.appendChild(addProjectModalSubmitBtn);
-addProjectModalContent.appendChild(addProjectModalForm)
+// // Form
+// const addProjectModalForm = document.createElement('form');
+// addProjectModalForm.className = 'add-project-modal-form';
+// // Label
+// const addProjectModalLabel = document.createElement('label');
+// addProjectModalLabel.for = 'project-name';
+// addProjectModalLabel.textContent = "Project Name";
+// addProjectModalForm.appendChild(addProjectModalLabel);
+// addProjectModalForm.style.display = 'flex';
+// addProjectModalForm.style.flexDirection = 'column';
+// // Input textbox
+// const addProjectModalInput = document.createElement('input');
+// addProjectModalInput.type = 'text';
+// addProjectModalInput.id = 'project-name';
+// addProjectModalInput.name = 'project-name';
+// addProjectModalInput.placeholder = 'Your Project';
+// addProjectModalForm.appendChild(addProjectModalInput);
+// // Add/submit Button
+// const addProjectModalSubmitBtn = document.createElement('input');
+// addProjectModalSubmitBtn.type = 'submit';
+// addProjectModalSubmitBtn.value = 'Add';
+// addProjectModalForm.appendChild(addProjectModalSubmitBtn);
+// addProjectModalContent.appendChild(addProjectModalForm)
 
 // Modal functionality
 // Get the modal
@@ -184,8 +187,6 @@ function showProjectModal() {
     modal.style.display = "block";
 }
 
-// var modal = document.getElementById("project-modal");
-addProjectBtn.addEventListener('click', showProjectModal)
 // // Get the button that opens the modal
 // var btn = document.getElementByClassName("custom-project-button");
 
@@ -260,7 +261,14 @@ contentElement.append(completedSection);
 
 mainSection.append(contentElement);
 wrapElement.append(mainSection);
-mainSection.append(addProjectModal)
+mainSection.append(projectModal);
+
+// const projectModalBtn = document.querySelector('.custom-project-button');
+// var modal = document.getElementById("project-modal");
+// CONTINUE
+addProjectBtn.addEventListener('click', showProjectModal);
+const closeBtn = document.querySelector('.project-close-button');
+closeBtn.addEventListener('click', closeWindow);
 
 
 // FOOTER SECTION
