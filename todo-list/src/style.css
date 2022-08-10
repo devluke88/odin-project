@@ -138,29 +138,46 @@ body {
 }
 
 /* Modal Content */
-.modal-content {
+.project-modal-content {
   background-color: #fefefe;
   margin: auto;
-  padding: 20px;
+  /* padding: 20px; */
   border: 1px solid #888;
   width: 50%;
 }
 
 /* The Close Button */
-.close-button {
+.project-close-button {
   color: #aaaaaa;
   float: right;
   font-size: 28px;
   font-weight: bold;
 }
 
-.close-button:hover,
-.close-button:focus {
+.project-close-button:hover,
+.project-close-button:focus {
   color: #000;
   text-decoration: none;
   cursor: pointer;
 }
 
+.project-modal-button {
+  background-color: var(--purple);
+  color: var(--white);
+  cursor: pointer;
+  padding: 14px;
+  border: none;
+  text-align: left;
+  outline: none;
+  font-size: 16px;
+  border-radius: 0.25rem;
+}
+
+.project-modal-button:hover {
+  background-color: var(--dark-purple);
+  border-radius: 0.25rem;
+  cursor: pointer;
+}
 
 
 /* MAIN */

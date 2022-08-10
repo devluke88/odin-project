@@ -124,24 +124,6 @@ addCustomProjectText.textContent = 'Add Project';
 addProjectBtn.appendChild(addCustomProjectText);
 projectsElements.append(addProjectBtn);
 
-
-
-// Add Project modal - CONTINUE!!!!!!!!!!!!
-// const test = modalModule('project-modal')
-// const addProjectModal = document.createElement('div');
-// addProjectModal.id = 'project-modal';
-
-// const addProjectModalContent = document.createElement('div');
-// addProjectModalContent.className = 'modal-content';
-
-// addProjectModalContent.style.display = 'flex';
-// addProjectModalContent.style.flexDirection = 'column';
-// addProjectModal.appendChild(addProjectModalContent);
-// Close Button
-// const closeBtn = document.createElement('span');
-// closeBtn.className = 'close-button';
-// closeBtn.innerHTML = '&times';
-// addProjectModalContent.appendChild(closeBtn)
 function closeWindow() {
     const modal = document.querySelector('#project-modal');
     modal.style.display = "none";
@@ -150,60 +132,12 @@ function closeWindow() {
 const projectModal = modalModule('project', 'Project Name');
 wrapElement.append(projectModal);
 
-
-// Text Content
-// const addProjectModalHeader = document.createElement('p');
-// addProjectModalHeader.className = 'add-project-modal-header';
-// addProjectModalHeader.textContent = 'Provide a new project name.'
-
-// // Form
-// const addProjectModalForm = document.createElement('form');
-// addProjectModalForm.className = 'add-project-modal-form';
-// // Label
-// const addProjectModalLabel = document.createElement('label');
-// addProjectModalLabel.for = 'project-name';
-// addProjectModalLabel.textContent = "Project Name";
-// addProjectModalForm.appendChild(addProjectModalLabel);
-// addProjectModalForm.style.display = 'flex';
-// addProjectModalForm.style.flexDirection = 'column';
-// // Input textbox
-// const addProjectModalInput = document.createElement('input');
-// addProjectModalInput.type = 'text';
-// addProjectModalInput.id = 'project-name';
-// addProjectModalInput.name = 'project-name';
-// addProjectModalInput.placeholder = 'Your Project';
-// addProjectModalForm.appendChild(addProjectModalInput);
-// // Add/submit Button
-// const addProjectModalSubmitBtn = document.createElement('input');
-// addProjectModalSubmitBtn.type = 'submit';
-// addProjectModalSubmitBtn.value = 'Add';
-// addProjectModalForm.appendChild(addProjectModalSubmitBtn);
-// addProjectModalContent.appendChild(addProjectModalForm)
-
 // Modal functionality
 // Get the modal
 function showProjectModal() {
     const modal = document.querySelector('#project-modal')
     modal.style.display = "block";
 }
-
-// // Get the button that opens the modal
-// var btn = document.getElementByClassName("custom-project-button");
-
-// document.getElementByClassName
-
-// // Get the <span> element that closes the modal
-// var span = document.getElementByClassName("close-button");
-
-// // When the user clicks the button, open the modal 
-// btn.onclick = function() {
-//   modal.style.display = "block";
-// }
-
-// // When the user clicks on <span> (x), close the modal
-// span.onclick = function() {
-//   modal.style.display = "none";
-// }
 
 // When the user clicks anywhere outside of the modal, close it
 window.onclick = function(event) {
@@ -213,20 +147,7 @@ window.onclick = function(event) {
   }
 }
 
-
-
-
-projectsBtn.addEventListener('click', openProjects)
-// Add project button
-
-// projectBtnContainer.className = 'project-bt';
-
-// Add new element to the project list
-// projectsList.push(projectName)
-// Add new element to the sidebar list
-
-
-
+projectsBtn.addEventListener('click', openProjects);
 
 // Sidebar element event listener
 const lis = document.querySelectorAll('li');
@@ -263,9 +184,6 @@ mainSection.append(contentElement);
 wrapElement.append(mainSection);
 mainSection.append(projectModal);
 
-// const projectModalBtn = document.querySelector('.custom-project-button');
-// var modal = document.getElementById("project-modal");
-// CONTINUE
 addProjectBtn.addEventListener('click', showProjectModal);
 const closeBtn = document.querySelector('.project-close-button');
 closeBtn.addEventListener('click', closeWindow);
