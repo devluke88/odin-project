@@ -65,9 +65,7 @@ const logoElement = document.querySelector('.logo-element')
 logoElement.addEventListener('click', takeMeHome)
 
 
-
 // SIDEBAR SECTION
-
 function openProjects() {
     console.log('Opened!');
     this.classList.toggle("active");
@@ -101,11 +99,12 @@ const projectsElements = document.createElement('div');
 projectsElements.className = 'collapsible-content';
 projectsElements.style.display = "block";
 sidebarMenu.append(projectsElements);
+// Test Button
 const customProjectBtn = document.createElement('button');
 customProjectBtn.className = 'custom-project';
 const customProjectIcon = document.createElement('i');
 customProjectIcon.className = 'fa-solid fa-circle';
-customProjectIcon.style.color = `#${Math.floor(Math.random()*16777215).toString(16)}`
+customProjectIcon.style.color = `#${Math.floor(Math.random()*16777215).toString(16)}`;
 const customProjectTxt = document.createElement('span');
 customProjectTxt.className = 'sidebar-element';
 customProjectTxt.textContent = 'Test';
@@ -129,7 +128,7 @@ function closeWindow() {
     modal.style.display = "none";
 }
 
-const projectModal = modalModule('project', 'Project Name');
+const projectModal = modalModule('project', 'New Project');
 wrapElement.append(projectModal);
 
 // Modal functionality
@@ -187,7 +186,40 @@ mainSection.append(projectModal);
 addProjectBtn.addEventListener('click', showProjectModal);
 const closeBtn = document.querySelector('.project-close-button');
 closeBtn.addEventListener('click', closeWindow);
+const modalCloseBtn = document.querySelector('.project-modal-close-button');
+modalCloseBtn.addEventListener('click', closeWindow);
+function validateForm() {
+    let x = document.getElementById("project-name").value;
+    if (x == "") {
+      alert("Name must be filled out");
+      return false;
+    }
+  }
 
+function createProject(e) {
+    e.preventDefault();
+    let validForm = validateForm()
+    if (validForm == true ){ 
+        console.log('test');
+        // Change style only and do nothing
+    }
+    else {
+        console.log('NO');
+        // Create new project button
+        // Create Object
+        // reset form
+        // display new project
+        closeWindow();
+    }
+}
+
+function resetForm(...elements) {
+
+}
+
+// Create Project
+const createProjecttBtn = document.querySelector('.project-modal-button');
+createProjecttBtn.addEventListener('click', createProject);
 
 // FOOTER SECTION
 const footerSection = document.createElement('footer');

@@ -14,7 +14,7 @@ const modalModule = (modalName, headerText) => {
     modalTopPanel.style.display = 'flex';
     modalTopPanel.style.justifyContent = 'space-between';
     modalTopPanel.style.alignItems = 'flex-end';
-    modalTopPanel.style.padding = '20px';
+    modalTopPanel.style.padding = '10px 20px';
     modalTopPanel.style.paddingBottom = '0px';
     // Header
     const modalHeader = document.createElement('h5');
@@ -32,7 +32,7 @@ const modalModule = (modalName, headerText) => {
     const spaceBar = document.createElement('hr');
     modalContent.appendChild(spaceBar);
     // Form
-    const modalForm = document.createElement('div');
+    const modalForm = document.createElement('form');
     modalForm.class = `${modalName}-modal-form`;
     modalForm.style.display = 'flex';
     modalForm.style.flexDirection = 'column';
@@ -55,6 +55,11 @@ const modalModule = (modalName, headerText) => {
     buttonContainer.style.padding = '0px 20px 20px 20px';
     buttonContainer.style.display = 'flex';
     buttonContainer.style.justifyContent = 'flex-end';
+    buttonContainer.style.gap = '10px';
+    const modalCloseBtn = document.createElement('button');
+    modalCloseBtn.className = `${modalName}-modal-close-button`;
+    modalCloseBtn.textContent = 'Close';
+    buttonContainer.appendChild(modalCloseBtn);
     const modalSubmitBtn = document.createElement('button');
     modalSubmitBtn.className = `${modalName}-modal-button`;
     modalSubmitBtn.type = 'submit';

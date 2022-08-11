@@ -127,7 +127,7 @@ body {
   display: none; /* Hidden by default */
   position: fixed; /* Stay in place */
   z-index: 1; /* Sit on top */
-  padding-top: 100px; /* Location of the box */
+  padding-top: 200px; /* Location of the box */
   left: 0;
   top: 0;
   width: 100%; /* Full width */
@@ -142,6 +142,7 @@ body {
   background-color: #fefefe;
   margin: auto;
   /* padding: 20px; */
+  max-width: 500px;
   border: 1px solid #888;
   width: 50%;
 }
@@ -165,7 +166,7 @@ body {
   background-color: var(--purple);
   color: var(--white);
   cursor: pointer;
-  padding: 14px;
+  padding: 7px 15px;
   border: none;
   text-align: left;
   outline: none;
@@ -179,6 +180,23 @@ body {
   cursor: pointer;
 }
 
+.project-modal-close-button {
+  background-color: var(--white);
+  color: var(--dark-grey);
+  cursor: pointer;
+  padding: 7px 15px;
+  border: 1px solid var(--dark-grey);
+  text-align: left;
+  outline: none;
+  font-size: 16px;
+  border-radius: 0.25rem;
+}
+
+.project-modal-close-button:hover {
+  background-color: var(--dark-grey);
+  color: var(--white);
+  border-radius: 0.25rem;
+}
 
 /* MAIN */
 #main {
