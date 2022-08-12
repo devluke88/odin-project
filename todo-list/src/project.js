@@ -1,5 +1,5 @@
 // Project
-const projectModule = (projectName, projectIcon='none', task=true) => {
+const projectModule = (projectName, projectIcon='none', task=true, taskList) => {
     // Parent Element
     const element = document.createElement('div');
     element.id = projectName.toLowerCase();
@@ -32,6 +32,22 @@ const projectModule = (projectName, projectIcon='none', task=true) => {
         element.appendChild(taskBtn);
     }
 
+    // III - Task Container
+    const taskContainer = document.createElement('div');
+    taskContainer.className = 'task-container';
+    taskContainer.style.display = 'flex';
+    taskContainer.style.flexDirection = 'column';
+    // Check if this should be outside of this function!!!!!!
+    for (let i = 0; i < taskList.length; i++) {
+        // Display task - provide list from object
+        let task = `<div class="task-item" data-task-item-index="${i}">`
+                    `<div class="task-title">${taskList[i].title}</div>`
+                    `<div class="task-description">${taskList[i].description}</div>`
+                    `<div class="task-due-date">${taskList[i].dueDate}</div>`
+                    `<div class="task-due-priority">${taskList[i].priority}</div>`
+        taskContainer.innerHTML += task
+    }
+    element.appendChild(taskContainer);
     return element;
 };
 

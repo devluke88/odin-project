@@ -1,10 +1,9 @@
 class TodoItem {
-    constructor(title, description, dueDate, priority, notes, checklist) {
+    constructor(title, description, dueDate, priority, checkbox) {
         this.title = title;
         this.description = description;
         this.dueDate = dueDate;
         this.priority = priority;
-        this.notes = notes;
-        this.checklist = checklist;
+        this.checkbox = checkbox;
     }
 }
