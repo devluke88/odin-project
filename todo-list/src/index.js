@@ -1,8 +1,8 @@
 import './style.css';
-import { projectModule } from './project'
+import { projectModule, customProject } from './project'
 import { sidebarModule } from './sidebar'
 import { navbarModule } from './navbar'
-import { modalModule } from './modal'
+// import { modalModule } from './modal'
 
 let todoList = [];
 
@@ -43,30 +43,31 @@ function takeMeHome(e) {
 }
 
 // Array with sidebar menu components
-const componentsList = [
+let defaultProjectsData = [
     {name: 'Inbox', icon: 'fa-solid fa-inbox'},
-    {name: 'All', icon: 'fa-solid fa-list'},
     {name: 'Today', icon: 'fa-solid fa-calendar-day'},
     // {name: 'Projects', icon: 'fa-solid fa-code-branch'},
-    {name: 'Completed', icon: 'fa-solid fa-circle-check'}
+    // {name: 'Completed', icon: 'fa-solid fa-circle-check'},
+    // {name: 'All', icon: 'fa-solid fa-list'},
 ]
 
-// Wrapper element, everything starts here
-const wrapElement = document.querySelector('.wrap');
-
-
-// NAV SECTION
+// APP
+const app = document.querySelector('.app');
+//
+// NAVBAR SECTION
+//
 const logoIcon = 'fa-solid fa-check-double';
 const logoText = 'todoList';
 const navbar = navbarModule(logoIcon, logoText)
-wrapElement.append(navbar);
+app.append(navbar);
 // Reload page when clicked on logo
 const logoElement = document.querySelector('.logo-element')
 logoElement.addEventListener('click', takeMeHome)
 
-
+//
 // SIDEBAR SECTION
-function openProjects() {
+//
+function collapseProjects() {
     console.log('Opened!');
     this.classList.toggle("active");
     var content = this.nextElementSibling;
@@ -77,13 +78,66 @@ function openProjects() {
     }
 }
 
-let projectsList = ['Inbox', 'Completed'];
+let mainContent = document.getElementsByClassName('content');
 
-const sidebar = sidebarModule(componentsList);
-wrapElement.append(sidebar);
+// Show given project content
+let showProject = (e) => {
+    console.log('Show project');
+    // Get the id of the project, for example inbox, today, test ...
+    let projectID = ""
+    if (e.target.id === "") {
+        projectID = e.target.parentElement.id
+    }
+    else {
+        projectID = e.target.id
+    }
+    let projectContent = document.getElementById(`${projectID}-project`);
+    // Show the selected project and hide the rest
+    for (let child of mainContent[0].children) {
+        console.log(child)
+        let childElement = document.getElementById(`${child.id}`)
+        if (childElement.id === projectContent.id) {
+            childElement.style.display = 'block';
+        }
+        else {
+            childElement.style.display = 'none';
+        }
+    }
+};
 
-const sidebarMenu  = document.querySelector('#sidebar');
-// Projects button
+
+const sidebar = sidebarModule(defaultProjectsData);
+app.append(sidebar);
+
+const sidebarMenu  = document.getElementById('sidebar');
+
+// Invoke action for the button in the sidebar
+let sidebarProjects = document.querySelectorAll('.sidebar-btn');
+sidebarProjects.forEach(item => {
+    item.addEventListener('click', event => {
+        showProject(event);
+    })
+});
+
+let customProjectsData = {}
+
+// let createProjects = () => {
+//     tasks.innerHTML = "";
+//     data.map((x, y) => {
+//         return (tasks.innerHTML += 
+//             `
+//             <div id=${y}>
+//                 <span class="fw-bold">${x.text}</span>
+//                 <span class="small text-secondary">${x.date}</span>
+//                 <p>${x.description}</p>
+//                 <span class="options">
+//                     <i onClick="editTask(this)" data-bs-toggle="modal" data-bs-target="#form" class="fas fa-edit"></i>
+//                     <i onClick="deleteTask(this);createTasks(this)" class="fas fa-trash-alt"></i>
+//                 </span>
+//             </div>
+//             `)
+//     });
+// Collapsible Projects button
 const projectsBtn = document.createElement('button');
 projectsBtn.className = 'sidebar-element2 collapsible';
 const projectsIcon = document.createElement('i');
@@ -98,10 +152,15 @@ sidebarMenu.append(projectsBtn)
 const projectsElements = document.createElement('div');
 projectsElements.className = 'collapsible-content';
 projectsElements.style.display = "block";
+
 sidebarMenu.append(projectsElements);
-// Test Button
+
+const customProjectsContainer = document.createElement('div');
+customProjectsContainer.className = 'custom-projects-container';
 const customProjectBtn = document.createElement('button');
 customProjectBtn.className = 'custom-project';
+customProjectBtn.id = 'test';
+
 const customProjectIcon = document.createElement('i');
 customProjectIcon.className = 'fa-solid fa-circle';
 customProjectIcon.style.color = `#${Math.floor(Math.random()*16777215).toString(16)}`;
@@ -110,43 +169,61 @@ customProjectTxt.className = 'sidebar-element';
 customProjectTxt.textContent = 'Test';
 customProjectBtn.appendChild(customProjectIcon);
 customProjectBtn.appendChild(customProjectTxt);
-projectsElements.append(customProjectBtn);
-// Add Project Button
-const addProjectBtn = document.createElement('button');
-addProjectBtn.className = 'custom-project-button';
-const addCustomProjectIcon = document.createElement('i');
-addCustomProjectIcon.className = 'fa-solid fa-plus';
-addProjectBtn.appendChild(addCustomProjectIcon);
-const addCustomProjectText = document.createElement('span');
-addCustomProjectText.className = 'sidebar-element';
-addCustomProjectText.textContent = 'Add Project';
-addProjectBtn.appendChild(addCustomProjectText);
-projectsElements.append(addProjectBtn);
+customProjectsContainer.appendChild(customProjectBtn);
+projectsElements.appendChild(customProjectsContainer);
 
-function closeWindow() {
-    const modal = document.querySelector('#project-modal');
-    modal.style.display = "none";
-}
+// Global Event Listener
+document.addEventListener('click',function(e){
+    let customProjectsContainer = document.querySelectorAll('.custom-project');
+    for (let element of customProjectsContainer) {
+        if (e.target && e.target.id == element.id || e.target.parentElement.id == element.id){
+            console.log('YES CORRECT');
+            showProject(e);
+            break
+        }
+    }
+    // Also working function //
+    // if(e.target && e.target.id == 'test' || e.target.parentElement.id == 'test'){
+    //     console.log("HEY")  
+    //     showProject(e);
+    //  }
+});
 
-const projectModal = modalModule('project', 'New Project');
-wrapElement.append(projectModal);
+// const addProjectBtn = document.createElement('button');
+// addProjectBtn.className = 'custom-project-button';
+// addProjectBtn.type = "button";
+// const addCustomProjectIcon = document.createElement('i');
+// addCustomProjectIcon.className = 'fa-solid fa-plus';
+// addProjectBtn.appendChild(addCustomProjectIcon);
+// const addCustomProjectText = document.createElement('span');
+// addCustomProjectText.className = 'sidebar-element';
+// addCustomProjectText.textContent = 'Add Project';
+// addProjectBtn.appendChild(addCustomProjectText);
+// projectsElements.append(addProjectBtn);
+projectsElements.innerHTML += `
+<button type="button" class="custom-project-button" data-bs-toggle="modal" data-bs-target="#exampleModal">
+    <i class="fa-solid fa-plus"></i>
+    <span class="sidebar-element">Add Project</span>
+</button>
+`
+// <!-- Button trigger modal -->
+/* 
+<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+  Launch demo modal
+</button> 
+*/
 
-// Modal functionality
-// Get the modal
-function showProjectModal() {
-    const modal = document.querySelector('#project-modal')
-    modal.style.display = "block";
-}
+
 
 // When the user clicks anywhere outside of the modal, close it
-window.onclick = function(event) {
-    const modal = document.querySelector('#project-modal');
-  if (event.target == modal) {
-    modal.style.display = "none";
-  }
-}
+// window.onclick = function(event) {
+//     const modal = document.querySelector('#project-modal');
+//   if (event.target == modal) {
+//     modal.style.display = "none";
+//   }
+// }
 
-projectsBtn.addEventListener('click', openProjects);
+projectsBtn.addEventListener('click', collapseProjects);
 
 // Sidebar element event listener
 const lis = document.querySelectorAll('li');
@@ -163,6 +240,7 @@ const contentElement = document.createElement('div');
 contentElement.className = 'content';
 // Inbox Section
 const inboxSection = projectModule('Inbox', 'fa-solid fa-inbox', true);
+inboxSection.style.display = "block";
 contentElement.append(inboxSection);
 // All Section
 const allSection = projectModule('All', 'fa-solid fa-list', true);
@@ -178,54 +256,41 @@ completedSection.style.display = 'none';
 contentElement.append(completedSection);
 // Projects Section
 // Add functionality to Projects button to display different projects, add dummy one
+const testSection = projectModule('Test', true);
+testSection.style.display = 'none';
+contentElement.append(testSection);
 
 mainSection.append(contentElement);
-wrapElement.append(mainSection);
-mainSection.append(projectModal);
+app.append(mainSection);
 
-addProjectBtn.addEventListener('click', showProjectModal);
-const closeBtn = document.querySelector('.project-close-button');
-closeBtn.addEventListener('click', closeWindow);
-const modalCloseBtn = document.querySelector('.project-modal-close-button');
-modalCloseBtn.addEventListener('click', closeWindow);
-function validateForm() {
-    let x = document.getElementById("project-name").value;
-    if (x == "") {
-      alert("Name must be filled out");
-      return false;
-    }
-  }
 
-function createProject(e) {
-    e.preventDefault();
-    let validForm = validateForm()
-    if (validForm == true ){ 
-        console.log('test');
-        // Change style only and do nothing
-    }
-    else {
-        console.log('NO');
-        // Create new project button
-        // Create Object
-        // reset form
-        // display new project
-        closeWindow();
-    }
-}
 
-function resetForm(...elements) {
-
-}
-
-// Create Project
-const createProjecttBtn = document.querySelector('.project-modal-button');
-createProjecttBtn.addEventListener('click', createProject);
+// Project Modal
+mainSection.innerHTML+=`
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">New Project</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        ...
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Add Project</button>
+      </div>
+    </div>
+  </div>
+</div>
+`
 
 // FOOTER SECTION
 const footerSection = document.createElement('footer');
 footerSection.className = 'footer';
 footerSection.innerHTML = 'Copyright © Lukasz 2022 <a href="#"><i class="fa-brands fa-github footer-icon"></i></a>'
-wrapElement.append(footerSection);
+app.append(footerSection);
 
 
 // TODO-4:
@@ -237,11 +302,3 @@ wrapElement.append(footerSection);
 // b. view all todos in each project (probably just the title and duedate.. perhaps changing color for different priorities)
 // c. expand a single todo to see/edit its details
 // d. delete a todo
-
-// TODO-6
-// For inspiration, check out the following great todo apps. (look at screenshots, watch their introduction videos etc.)
-// Todoist
-// Things
-// any.do
-
-// TODO-7 Add image under add task when there is no tasks
