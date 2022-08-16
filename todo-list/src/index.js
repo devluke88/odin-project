@@ -155,8 +155,9 @@ projectsElements.style.display = "block";
 
 sidebarMenu.append(projectsElements);
 
-const customProjectsContainer = document.createElement('div');
+let customProjectsContainer = document.createElement('div');
 customProjectsContainer.className = 'custom-projects-container';
+customProjectsContainer.id = 'custom-projects-container';
 const customProjectBtn = document.createElement('button');
 customProjectBtn.className = 'custom-project';
 customProjectBtn.id = 'test';
@@ -238,6 +239,7 @@ mainSection.id = "main"
 // Content of the main section
 const contentElement = document.createElement('div');
 contentElement.className = 'content';
+contentElement.id = 'content';
 // Inbox Section
 const inboxSection = projectModule('Inbox', 'fa-solid fa-inbox', true);
 inboxSection.style.display = "block";
@@ -267,7 +269,7 @@ app.append(mainSection);
 
 // Project Modal
 mainSection.innerHTML+=`
-<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<form class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
@@ -275,16 +277,134 @@ mainSection.innerHTML+=`
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        ...
+        <label>Name:</label>
+        <input class="form-control" type="text" name="" id="project-name-text-input">
+        <div id="project-msg"></div>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Add Project</button>
+        <button type="submit" class="btn btn-primary" id="add-project">Add Project</button>
       </div>
     </div>
   </div>
-</div>
+</form>
 `
+let projectModal = document.getElementById('exampleModal');
+let projectMsg = document.getElementById('project-msg');
+let projectNameTextInput = document.getElementById('project-name-text-input');
+let addProject = document.getElementById('add-project');
+let customPrjContainer = document.getElementById('custom-projects-container');
+let content = document.getElementById('content');
+
+let projectFormValidation = () => {
+    if (projectNameTextInput.value === "") {
+        projectMsg.innerHTML = "Project name is required.";
+    }
+    else if (projectNameTextInput.value === "Test") {
+        projectMsg.innerHTML = "Project already exists. Choose different name."
+    }
+    else {
+        projectMsg.innerHTML = "";
+        acceptProjectData();
+        addProject.setAttribute("data-bs-dismiss", 'modal');
+        addProject.click();
+        
+        (() => {
+            addProject.setAttribute("data-bs-dismiss", '');
+        })();
+    }
+};
+
+let defaultProjectsDataStore = [
+    {name: 'Inbox', icon: 'fa-solid fa-inbox', tasks: []},
+    {name: 'Today', icon: 'fa-solid fa-calendar-day'}
+]
+let projectsData = [{
+    name: 'Test',
+    tasks: []
+}]
+
+// let sidebarCustomProjectData = [{
+//     name: "Test"
+// }]
+
+let acceptProjectData = () => {
+    console.log("data accepted");
+    console.log(projectNameTextInput.value)
+    projectsData.push({
+        name: projectNameTextInput.value,
+        tasks: [],
+    });
+    // sidebarCustomProjectData.push({
+    //     name: projectNameTextInput.value,
+    // });
+    // localStorage.setItem("sidebarCustomProjectData", JSON.stringify(sidebarCustomProjectData));
+    localStorage.setItem("projectsData", JSON.stringify(projectsData));
+    createProjectButton();
+    createProject();
+};
+
+
+let createProjectButton = () => {
+    customPrjContainer.innerHTML = "";
+    projectsData.map((x, y) => {
+        return (customPrjContainer.innerHTML +=
+            `
+            <button class="custom-project ${y}" id="${x.name.toLowerCase()}">
+                <i class="fa-solid fa-circle" style="color: rgb(131, 229, 77);"></i>
+                <span class="sidebar-element">${x.name}</span>
+            </button>
+            `
+        )
+    });
+};
+
+let createProject = () => {
+    content.innerHTML = "";
+    defaultProjectsDataStore.map((x, y) =>{
+        return (content.innerHTML +=
+            `
+            <div id="${x.name.toLowerCase()}-project" class="default-project-${y}" style="display: block;">
+                <div class="content-header">
+                    <i class="${x.icon}"></i>
+                    <span class="content-header-text"> ${x.name}</span>
+                </div>
+                <div class="new-task-btn">
+                    <i class="fa-solid fa-plus new-task-icon"></i>
+                    <span class="new-task-btn-text">New Task</span>
+                </div>
+            </div>
+            `
+        )
+    });
+    projectsData.map((x, y) => {
+        return (content.innerHTML += 
+            `
+            <div id="${x.name.toLowerCase()}-project" class="custom-project-${y}" style="display: none;">
+                <div class="content-header">
+                    <i class="true"></i>
+                    <span class="content-header-text"> ${x.name}</span>
+                </div>
+                <div class="new-task-btn">
+                    <i class="fa-solid fa-plus new-task-icon"></i>
+                    <span class="new-task-btn-text">New Task</span>
+                </div>
+            </div>
+            `
+        )
+    });
+    
+    resetProjectForm();
+};
+
+let resetProjectForm = () => {
+    projectNameTextInput.value = "";
+}
+
+projectModal.addEventListener('submit', (e)=>{
+    e.preventDefault();
+    projectFormValidation();
+})
 
 // FOOTER SECTION
 const footerSection = document.createElement('footer');
@@ -302,3 +422,11 @@ app.append(footerSection);
 // b. view all todos in each project (probably just the title and duedate.. perhaps changing color for different priorities)
 // c. expand a single todo to see/edit its details
 // d. delete a todo
+(() => {
+    // sidebarCustomProjectData = JSON.parse(localStorage.getItem('"sidebarCustomProjectData"')) || []; 
+    projectsData = JSON.parse(localStorage.getItem('"projectsData"')) || [];
+    createProjectButton();
+    createProject();
+    // console.log(sidebarCustomProjectData);
+    console.log(projectsData);
+})();
