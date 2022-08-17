@@ -220,7 +220,8 @@ li a:hover {
   padding-left: 10px;
 }
 
-#project-msg {
+#project-msg,
+#task-msg {
   color: var(--red);
 }
 

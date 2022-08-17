@@ -289,12 +289,64 @@ mainSection.innerHTML+=`
   </div>
 </form>
 `
+
+// Todo Modal
+mainSection.innerHTML+=`
+<form class="modal fade" id="taskModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">New Task</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="mb-3">
+            <label>Name: </Label>
+            <input class="form-control" type="text" name="" id="task-name-input">
+            <div id="task-msg">
+            </div>
+        </div>
+        <div class="mb-3">
+            <label>Due Date: </label>
+            <input class="form-control" type="date" name="" id="taskDateInput">
+        </div>
+        <div class="mb-3">
+            <label>Description: </label>
+            <textarea class="form-control"  name="" id="taskTextarea" cols="30" rows="5"></textarea>
+        </div>
+        <div class="mb-3">
+            <label>Priority: </label>
+            <select class="form-select" aria-label="Default select priority">
+                <option selected value="1">Low</option>
+                <option value="2">Medium</option>
+                <option value="3">High</option>
+            </select> 
+        </div>
+        <div class="mb-3">
+            <label>Project: </label>
+            <select class="form-select project-select" aria-label="Default select project">
+                <option selected value="1">Inbox</option>
+            </select>     
+        </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-primary" id="add-task">Add Task</button>
+      </div>
+    </div>
+  </div>
+</form>
+`
+
 let projectModal = document.getElementById('exampleModal');
 let projectMsg = document.getElementById('project-msg');
 let projectNameTextInput = document.getElementById('project-name-text-input');
 let addProject = document.getElementById('add-project');
 let customPrjContainer = document.getElementById('custom-projects-container');
 let content = document.getElementById('content');
+let taskModal = document.getElementById('taskModal');
+let taskNameInput = document.getElementById('task-name-input');
+let addTask = document.getElementById('add-task');
+let taskMsg = document.getElementById('task-msg');
 
 let projectFormValidation = () => {
     if (projectNameTextInput.value === "") {
@@ -315,39 +367,58 @@ let projectFormValidation = () => {
     }
 };
 
+let taskFormValidation = () => {
+    if (taskNameInput.value === "") {
+        taskMsg.innerHTML = 'Task name is required.'
+    }
+    else {
+        taskMsg.innerHTML = "";
+        acceptTaskData();
+        addTask.setAttribute("data-bs-dismiss", 'modal');
+        addTask.click();
+        
+        (() => {
+            addTask.setAttribute("data-bs-dismiss", '');
+        })();
+    }
+};
+// TODO: Finish accept data
+let acceptTaskData = () => {
+    console.log("task data accepted");
+    console.log(taskNameInput.value)
+    // projectsData.push({
+    //     name: projectNameTextInput.value,
+    //     tasks: []
+    // });
+    // localStorage.setItem("projectsData", JSON.stringify(projectsData));
+    // createProjectButton();
+    // createProject();
+};
+
 let defaultProjectsDataStore = [
     {name: 'Inbox', icon: 'fa-solid fa-inbox', tasks: []},
     {name: 'Today', icon: 'fa-solid fa-calendar-day'}
 ]
-let projectsData = [{
-    name: 'Test',
-    tasks: []
-}]
 
-// let sidebarCustomProjectData = [{
-//     name: "Test"
-// }]
+let projectsData = []
 
 let acceptProjectData = () => {
     console.log("data accepted");
     console.log(projectNameTextInput.value)
     projectsData.push({
         name: projectNameTextInput.value,
-        tasks: [],
+        tasks: []
     });
-    // sidebarCustomProjectData.push({
-    //     name: projectNameTextInput.value,
-    // });
-    // localStorage.setItem("sidebarCustomProjectData", JSON.stringify(sidebarCustomProjectData));
     localStorage.setItem("projectsData", JSON.stringify(projectsData));
     createProjectButton();
     createProject();
 };
 
-
 let createProjectButton = () => {
     customPrjContainer.innerHTML = "";
+    console.log(`Project data: ${projectsData}`)
     projectsData.map((x, y) => {
+        console.log(`X: ${x.name}`)
         return (customPrjContainer.innerHTML +=
             `
             <button class="custom-project ${y}" id="${x.name.toLowerCase()}">
@@ -362,22 +433,24 @@ let createProjectButton = () => {
 let createProject = () => {
     content.innerHTML = "";
     defaultProjectsDataStore.map((x, y) =>{
+        console.log(`Project x: ${x.name}`)
         return (content.innerHTML +=
             `
-            <div id="${x.name.toLowerCase()}-project" class="default-project-${y}" style="display: block;">
+            <div id="${x.name.toLowerCase()}-project" class="default-project-${y}" style="display: none;">
                 <div class="content-header">
                     <i class="${x.icon}"></i>
                     <span class="content-header-text"> ${x.name}</span>
                 </div>
-                <div class="new-task-btn">
+                <button type="button" class="new-task-btn" data-bs-toggle="modal" data-bs-target="#taskModal">
                     <i class="fa-solid fa-plus new-task-icon"></i>
                     <span class="new-task-btn-text">New Task</span>
-                </div>
+                </button>
             </div>
             `
         )
     });
     projectsData.map((x, y) => {
+        console.log(`Project x: ${x.name}`)
         return (content.innerHTML += 
             `
             <div id="${x.name.toLowerCase()}-project" class="custom-project-${y}" style="display: none;">
@@ -385,10 +458,10 @@ let createProject = () => {
                     <i class="true"></i>
                     <span class="content-header-text"> ${x.name}</span>
                 </div>
-                <div class="new-task-btn">
+                <button type="button" class="new-task-btn" data-bs-toggle="modal" data-bs-target="#taskModal">
                     <i class="fa-solid fa-plus new-task-icon"></i>
                     <span class="new-task-btn-text">New Task</span>
-                </div>
+                </button>
             </div>
             `
         )
@@ -401,10 +474,7 @@ let resetProjectForm = () => {
     projectNameTextInput.value = "";
 }
 
-projectModal.addEventListener('submit', (e)=>{
-    e.preventDefault();
-    projectFormValidation();
-})
+
 
 // FOOTER SECTION
 const footerSection = document.createElement('footer');
@@ -423,10 +493,21 @@ app.append(footerSection);
 // c. expand a single todo to see/edit its details
 // d. delete a todo
 (() => {
-    // sidebarCustomProjectData = JSON.parse(localStorage.getItem('"sidebarCustomProjectData"')) || []; 
-    projectsData = JSON.parse(localStorage.getItem('"projectsData"')) || [];
+    projectsData = JSON.parse(localStorage.getItem("projectsData")) || [];
     createProjectButton();
     createProject();
-    // console.log(sidebarCustomProjectData);
     console.log(projectsData);
+    let inbox = document.getElementById('inbox-project');
+    inbox.style.display = "block";
+
 })();
+
+projectModal.addEventListener('submit', (e)=>{
+    e.preventDefault();
+    projectFormValidation();
+})
+
+taskModal.addEventListener('submit', (e)=>{
+    e.preventDefault();
+    taskFormValidation();
+})
