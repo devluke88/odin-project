@@ -6,8 +6,12 @@ import { navbarModule } from './navbar'
 
 let todoList = [];
 
-// TODO-3:
-// Your todo list should have projects or separate lists of todos. When a user first opens the app, there should be some sort of ‘default’ project to which all of their todos are put. Users should be able to create new projects and choose which project their todos go into.
+// Function to generate unique id for the task
+function uuidv4() {
+    return ([1e7]+-1e3+-4e3+-8e3+-1e11).replace(/[018]/g, c =>
+        (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)
+    );
+}
 
 // Function to display given selected section
 function getSection(e) {
@@ -240,27 +244,28 @@ mainSection.id = "main"
 const contentElement = document.createElement('div');
 contentElement.className = 'content';
 contentElement.id = 'content';
+// ELEMENTS TO DELETE
 // Inbox Section
-const inboxSection = projectModule('Inbox', 'fa-solid fa-inbox', true);
-inboxSection.style.display = "block";
-contentElement.append(inboxSection);
+// const inboxSection = projectModule('Inbox', 'fa-solid fa-inbox', true);
+// inboxSection.style.display = "block";
+// contentElement.append(inboxSection);
 // All Section
-const allSection = projectModule('All', 'fa-solid fa-list', true);
-allSection.style.display = 'none';
-contentElement.append(allSection);
+// const allSection = projectModule('All', 'fa-solid fa-list', true);
+// allSection.style.display = 'none';
+// contentElement.append(allSection);
 // Today Section
-const todaySection = projectModule('Today', 'fa-solid fa-calendar-day', true);
-todaySection.style.display = 'none';
-contentElement.append(todaySection);
+// const todaySection = projectModule('Today', 'fa-solid fa-calendar-day', true);
+// todaySection.style.display = 'none';
+// contentElement.append(todaySection);
 // Completed Section
-const completedSection = projectModule('Completed', 'fa-solid fa-circle-check', true);
-completedSection.style.display = 'none';
-contentElement.append(completedSection);
+// const completedSection = projectModule('Completed', 'fa-solid fa-circle-check', true);
+// completedSection.style.display = 'none';
+// contentElement.append(completedSection);
 // Projects Section
 // Add functionality to Projects button to display different projects, add dummy one
-const testSection = projectModule('Test', true);
-testSection.style.display = 'none';
-contentElement.append(testSection);
+// const testSection = projectModule('Test', true);
+// testSection.style.display = 'none';
+// contentElement.append(testSection);
 
 mainSection.append(contentElement);
 app.append(mainSection);
@@ -290,9 +295,9 @@ mainSection.innerHTML+=`
 </form>
 `
 
-// Todo Modal
+// Task Modal
 mainSection.innerHTML+=`
-<form class="modal fade" id="taskModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<form class="modal fade" id="task-modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
@@ -308,15 +313,15 @@ mainSection.innerHTML+=`
         </div>
         <div class="mb-3">
             <label>Due Date: </label>
-            <input class="form-control" type="date" name="" id="taskDateInput">
+            <input class="form-control" type="date" name="" id="task-date-input">
         </div>
         <div class="mb-3">
             <label>Description: </label>
-            <textarea class="form-control"  name="" id="taskTextarea" cols="30" rows="5"></textarea>
+            <textarea class="form-control"  name="" id="task-description" cols="30" rows="5"></textarea>
         </div>
         <div class="mb-3">
             <label>Priority: </label>
-            <select class="form-select" aria-label="Default select priority">
+            <select id="task-priority" class="form-select" aria-label="Default select priority">
                 <option selected value="1">Low</option>
                 <option value="2">Medium</option>
                 <option value="3">High</option>
@@ -324,8 +329,7 @@ mainSection.innerHTML+=`
         </div>
         <div class="mb-3">
             <label>Project: </label>
-            <select class="form-select project-select" aria-label="Default select project">
-                <option selected value="1">Inbox</option>
+            <select id="task-project" class="form-select project-select" aria-label="Default select project">
             </select>     
         </div>
       <div class="modal-footer">
@@ -343,10 +347,18 @@ let projectNameTextInput = document.getElementById('project-name-text-input');
 let addProject = document.getElementById('add-project');
 let customPrjContainer = document.getElementById('custom-projects-container');
 let content = document.getElementById('content');
-let taskModal = document.getElementById('taskModal');
+let taskModal = document.getElementById('task-modal');
 let taskNameInput = document.getElementById('task-name-input');
+let taskDateInput = document.getElementById('task-date-input');
+let taskDescription = document.getElementById('task-description');
+let taskPriority = document.getElementById('task-priority');
+let taskProject = document.getElementById('task-project');
 let addTask = document.getElementById('add-task');
 let taskMsg = document.getElementById('task-msg');
+
+// Project and task stores
+let projectsData = []
+let tasksData = []
 
 let projectFormValidation = () => {
     if (projectNameTextInput.value === "") {
@@ -367,6 +379,7 @@ let projectFormValidation = () => {
     }
 };
 
+
 let taskFormValidation = () => {
     if (taskNameInput.value === "") {
         taskMsg.innerHTML = 'Task name is required.'
@@ -382,31 +395,59 @@ let taskFormValidation = () => {
         })();
     }
 };
+
+
 // TODO: Finish accept data
 let acceptTaskData = () => {
     console.log("task data accepted");
     console.log(taskNameInput.value)
+    console.log(taskDateInput.value)
+    console.log(taskDescription.value)
+    
+    let taskEnteredPriority = "Low";
+    if (taskPriority.value === 2) {
+        taskEnteredPriority = "Medium";
+    }
+    else if (taskPriority.value === 3) {
+        taskEnteredPriority = "High";
+    }
+    console.log(taskEnteredPriority)
+    console.log(taskProject.value)
+
+    let taskUUID = uuidv4();
+    console.log(`Task: ${taskUUID}`)
+    tasksData.push({
+        id: taskUUID,
+        name: taskNameInput.value,
+        date: taskDateInput.value,
+        description: taskDescription.value,
+        priority: taskEnteredPriority,
+        project: taskProject.value
+    });
+    console.log("Before fail")
+    localStorage.setItem("tasksData", JSON.stringify(tasksData));
+    console.log("ANother fail")
+    //FIX ERROR below - update project data tasks list
+    // let objIndex = projectsData.findIndex((obj => obj.name === taskProject.value));
+    // projectsData[objIndex]["tasks"].push(taskUUID);
+    // console.log(`Projects data: ${projectsData[objIndex]}`)
+    // localStorage.setItem("projectsData", JSON.stringify(projectsData));
     // projectsData.push({
     //     name: projectNameTextInput.value,
     //     tasks: []
     // });
     // localStorage.setItem("projectsData", JSON.stringify(projectsData));
-    // createProjectButton();
-    // createProject();
+    
 };
 
-let defaultProjectsDataStore = [
-    {name: 'Inbox', icon: 'fa-solid fa-inbox', tasks: []},
-    {name: 'Today', icon: 'fa-solid fa-calendar-day'}
-]
-
-let projectsData = []
 
 let acceptProjectData = () => {
-    console.log("data accepted");
-    console.log(projectNameTextInput.value)
+    // console.log("data accepted");
+    // console.log(projectNameTextInput.value)
     projectsData.push({
+        id: uuidv4(),
         name: projectNameTextInput.value,
+        icon: "",
         tasks: []
     });
     localStorage.setItem("projectsData", JSON.stringify(projectsData));
@@ -414,66 +455,87 @@ let acceptProjectData = () => {
     createProject();
 };
 
+
 let createProjectButton = () => {
     customPrjContainer.innerHTML = "";
     console.log(`Project data: ${projectsData}`)
     projectsData.map((x, y) => {
         console.log(`X: ${x.name}`)
-        return (customPrjContainer.innerHTML +=
-            `
-            <button class="custom-project ${y}" id="${x.name.toLowerCase()}">
-                <i class="fa-solid fa-circle" style="color: rgb(131, 229, 77);"></i>
-                <span class="sidebar-element">${x.name}</span>
-            </button>
-            `
-        )
+        // Skip creating inbox button
+        if (x.name !== "Inbox" && x.name !== "Today") {
+            return (customPrjContainer.innerHTML +=
+                `
+                <button class="custom-project ${y}" id="${x.name.toLowerCase()}">
+                    <i class="fa-solid fa-circle" style="color: rgb(131, 229, 77);"></i>
+                    <span class="sidebar-element">${x.name}</span>
+                </button>
+                `
+            )
+        };
+        
     });
 };
 
+
 let createProject = () => {
     content.innerHTML = "";
-    defaultProjectsDataStore.map((x, y) =>{
-        console.log(`Project x: ${x.name}`)
-        return (content.innerHTML +=
-            `
-            <div id="${x.name.toLowerCase()}-project" class="default-project-${y}" style="display: none;">
-                <div class="content-header">
-                    <i class="${x.icon}"></i>
-                    <span class="content-header-text"> ${x.name}</span>
-                </div>
-                <button type="button" class="new-task-btn" data-bs-toggle="modal" data-bs-target="#taskModal">
-                    <i class="fa-solid fa-plus new-task-icon"></i>
-                    <span class="new-task-btn-text">New Task</span>
-                </button>
-            </div>
-            `
-        )
-    });
     projectsData.map((x, y) => {
         console.log(`Project x: ${x.name}`)
-        return (content.innerHTML += 
-            `
-            <div id="${x.name.toLowerCase()}-project" class="custom-project-${y}" style="display: none;">
-                <div class="content-header">
-                    <i class="true"></i>
-                    <span class="content-header-text"> ${x.name}</span>
+        if (x.name !== "Inbox" && x.name !== "Today" ) {
+            return (content.innerHTML += 
+                `
+                <div id="${x.name.toLowerCase()}-project" class="custom-project-${y}" style="display: none;">
+                    <div class="content-header">
+                        <i class="true"></i>
+                        <span class="content-header-text"> ${x.name}</span>
+                    </div>
+                    <button type="button" class="new-task-btn" data-bs-toggle="modal" data-bs-target="#task-modal">
+                        <i class="fa-solid fa-plus new-task-icon"></i>
+                        <span class="new-task-btn-text">New Task</span>
+                    </button>
+                    <div id="${x.name.toLowerCase()}-project-tasks">
+                    </div>
                 </div>
-                <button type="button" class="new-task-btn" data-bs-toggle="modal" data-bs-target="#taskModal">
-                    <i class="fa-solid fa-plus new-task-icon"></i>
-                    <span class="new-task-btn-text">New Task</span>
-                </button>
-            </div>
-            `
-        )
+                `
+            );   
+        }
+        else {
+            return (content.innerHTML +=
+                `
+                <div id="${x.name.toLowerCase()}-project" class="default-project-${y}" style="display: none;">
+                    <div class="content-header">
+                        <i class="${x.icon}"></i>
+                        <span class="content-header-text"> ${x.name}</span>
+                    </div>
+                    <button type="button" class="new-task-btn" data-bs-toggle="modal" data-bs-target="#task-modal">
+                        <i class="fa-solid fa-plus new-task-icon"></i>
+                        <span class="new-task-btn-text">New Task</span>
+                    </button>
+                    <div id="${x.name.toLowerCase()}-project-tasks">
+                    </div>
+                </div>
+                `
+            );
+        }  
     });
-    
     resetProjectForm();
+    taskProject.innerHTML = "";
+    projectsData.map((x, y) => {
+        if (x.name !== "Today") {
+            return(
+                taskProject.innerHTML += 
+                `
+                <option value="${x.id}">${x.name}</option>
+                `
+            );
+        }
+    });
 };
+
 
 let resetProjectForm = () => {
     projectNameTextInput.value = "";
 }
-
 
 
 // FOOTER SECTION
@@ -493,7 +555,8 @@ app.append(footerSection);
 // c. expand a single todo to see/edit its details
 // d. delete a todo
 (() => {
-    projectsData = JSON.parse(localStorage.getItem("projectsData")) || [];
+    projectsData = JSON.parse(localStorage.getItem("projectsData")) || [{id: uuidv4(), name: "Inbox", icon: "fa-solid fa-inbox", tasks: []}, {id: uuidv4(), name: "Today", icon: "fa-solid fa-calendar-day", tasks: []}];
+    tasksData = JSON.parse(localStorage.getItem("tasksData")) || [];
     createProjectButton();
     createProject();
     console.log(projectsData);
