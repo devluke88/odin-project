@@ -72,7 +72,6 @@ logoElement.addEventListener('click', takeMeHome)
 // SIDEBAR SECTION
 //
 function collapseProjects() {
-    console.log('Opened!');
     this.classList.toggle("active");
     var content = this.nextElementSibling;
     if (content.style.display === "block") {
@@ -86,7 +85,6 @@ let mainContent = document.getElementsByClassName('content');
 
 // Show given project content
 let showProject = (e) => {
-    console.log('Show project');
     // Get the id of the project, for example inbox, today, test ...
     let projectID = ""
     if (e.target.id === "") {
@@ -98,7 +96,6 @@ let showProject = (e) => {
     let projectContent = document.getElementById(`${projectID}-project`);
     // Show the selected project and hide the rest
     for (let child of mainContent[0].children) {
-        console.log(child)
         let childElement = document.getElementById(`${child.id}`)
         if (childElement.id === projectContent.id) {
             childElement.style.display = 'block';
@@ -125,22 +122,6 @@ sidebarProjects.forEach(item => {
 
 let customProjectsData = {}
 
-// let createProjects = () => {
-//     tasks.innerHTML = "";
-//     data.map((x, y) => {
-//         return (tasks.innerHTML += 
-//             `
-//             <div id=${y}>
-//                 <span class="fw-bold">${x.text}</span>
-//                 <span class="small text-secondary">${x.date}</span>
-//                 <p>${x.description}</p>
-//                 <span class="options">
-//                     <i onClick="editTask(this)" data-bs-toggle="modal" data-bs-target="#form" class="fas fa-edit"></i>
-//                     <i onClick="deleteTask(this);createTasks(this)" class="fas fa-trash-alt"></i>
-//                 </span>
-//             </div>
-//             `)
-//     });
 // Collapsible Projects button
 const projectsBtn = document.createElement('button');
 projectsBtn.className = 'sidebar-element2 collapsible';
@@ -182,51 +163,19 @@ document.addEventListener('click',function(e){
     let customProjectsContainer = document.querySelectorAll('.custom-project');
     for (let element of customProjectsContainer) {
         if (e.target && e.target.id == element.id || e.target.parentElement.id == element.id){
-            console.log('YES CORRECT');
             showProject(e);
             break
         }
     }
-    // Also working function //
-    // if(e.target && e.target.id == 'test' || e.target.parentElement.id == 'test'){
-    //     console.log("HEY")  
-    //     showProject(e);
-    //  }
 });
 
-// const addProjectBtn = document.createElement('button');
-// addProjectBtn.className = 'custom-project-button';
-// addProjectBtn.type = "button";
-// const addCustomProjectIcon = document.createElement('i');
-// addCustomProjectIcon.className = 'fa-solid fa-plus';
-// addProjectBtn.appendChild(addCustomProjectIcon);
-// const addCustomProjectText = document.createElement('span');
-// addCustomProjectText.className = 'sidebar-element';
-// addCustomProjectText.textContent = 'Add Project';
-// addProjectBtn.appendChild(addCustomProjectText);
-// projectsElements.append(addProjectBtn);
 projectsElements.innerHTML += `
 <button type="button" class="custom-project-button" data-bs-toggle="modal" data-bs-target="#exampleModal">
     <i class="fa-solid fa-plus"></i>
     <span class="sidebar-element">Add Project</span>
 </button>
 `
-// <!-- Button trigger modal -->
-/* 
-<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
-  Launch demo modal
-</button> 
-*/
 
-
-
-// When the user clicks anywhere outside of the modal, close it
-// window.onclick = function(event) {
-//     const modal = document.querySelector('#project-modal');
-//   if (event.target == modal) {
-//     modal.style.display = "none";
-//   }
-// }
 
 projectsBtn.addEventListener('click', collapseProjects);
 
@@ -244,32 +193,9 @@ mainSection.id = "main"
 const contentElement = document.createElement('div');
 contentElement.className = 'content';
 contentElement.id = 'content';
-// ELEMENTS TO DELETE
-// Inbox Section
-// const inboxSection = projectModule('Inbox', 'fa-solid fa-inbox', true);
-// inboxSection.style.display = "block";
-// contentElement.append(inboxSection);
-// All Section
-// const allSection = projectModule('All', 'fa-solid fa-list', true);
-// allSection.style.display = 'none';
-// contentElement.append(allSection);
-// Today Section
-// const todaySection = projectModule('Today', 'fa-solid fa-calendar-day', true);
-// todaySection.style.display = 'none';
-// contentElement.append(todaySection);
-// Completed Section
-// const completedSection = projectModule('Completed', 'fa-solid fa-circle-check', true);
-// completedSection.style.display = 'none';
-// contentElement.append(completedSection);
-// Projects Section
-// Add functionality to Projects button to display different projects, add dummy one
-// const testSection = projectModule('Test', true);
-// testSection.style.display = 'none';
-// contentElement.append(testSection);
 
 mainSection.append(contentElement);
 app.append(mainSection);
-
 
 
 // Project Modal
@@ -360,6 +286,7 @@ let taskMsg = document.getElementById('task-msg');
 let projectsData = []
 let tasksData = []
 
+
 let projectFormValidation = () => {
     if (projectNameTextInput.value === "") {
         projectMsg.innerHTML = "Project name is required.";
@@ -397,13 +324,7 @@ let taskFormValidation = () => {
 };
 
 
-// TODO: Finish accept data
-let acceptTaskData = () => {
-    console.log("task data accepted");
-    console.log(taskNameInput.value)
-    console.log(taskDateInput.value)
-    console.log(taskDescription.value)
-    
+let acceptTaskData = () => {    
     let taskEnteredPriority = "Low";
     if (taskPriority.value === 2) {
         taskEnteredPriority = "Medium";
@@ -411,9 +332,6 @@ let acceptTaskData = () => {
     else if (taskPriority.value === 3) {
         taskEnteredPriority = "High";
     }
-    console.log(taskEnteredPriority)
-    console.log(taskProject.value)
-
     let taskUUID = uuidv4();
     console.log(`Task: ${taskUUID}`)
     tasksData.push({
@@ -424,26 +342,19 @@ let acceptTaskData = () => {
         priority: taskEnteredPriority,
         project: taskProject.value
     });
-    console.log("Before fail")
     localStorage.setItem("tasksData", JSON.stringify(tasksData));
-    console.log("ANother fail")
-    //FIX ERROR below - update project data tasks list
-    // let objIndex = projectsData.findIndex((obj => obj.name === taskProject.value));
-    // projectsData[objIndex]["tasks"].push(taskUUID);
-    // console.log(`Projects data: ${projectsData[objIndex]}`)
-    // localStorage.setItem("projectsData", JSON.stringify(projectsData));
-    // projectsData.push({
-    //     name: projectNameTextInput.value,
-    //     tasks: []
-    // });
-    // localStorage.setItem("projectsData", JSON.stringify(projectsData));
-    
+    for (let element of projectsData) {
+        if (element.id === taskProject.value) {
+            element["tasks"].push(taskUUID);
+        }
+    }
+    localStorage.setItem("projectsData", JSON.stringify(projectsData));
+    createTasks();
+    resetTaskForm();
 };
 
 
 let acceptProjectData = () => {
-    // console.log("data accepted");
-    // console.log(projectNameTextInput.value)
     projectsData.push({
         id: uuidv4(),
         name: projectNameTextInput.value,
@@ -458,9 +369,7 @@ let acceptProjectData = () => {
 
 let createProjectButton = () => {
     customPrjContainer.innerHTML = "";
-    console.log(`Project data: ${projectsData}`)
     projectsData.map((x, y) => {
-        console.log(`X: ${x.name}`)
         // Skip creating inbox button
         if (x.name !== "Inbox" && x.name !== "Today") {
             return (customPrjContainer.innerHTML +=
@@ -480,7 +389,6 @@ let createProjectButton = () => {
 let createProject = () => {
     content.innerHTML = "";
     projectsData.map((x, y) => {
-        console.log(`Project x: ${x.name}`)
         if (x.name !== "Inbox" && x.name !== "Today" ) {
             return (content.innerHTML += 
                 `
@@ -489,7 +397,7 @@ let createProject = () => {
                         <i class="true"></i>
                         <span class="content-header-text"> ${x.name}</span>
                     </div>
-                    <button type="button" class="new-task-btn" data-bs-toggle="modal" data-bs-target="#task-modal">
+                    <button type="button" class="btn new-task-btn" data-bs-toggle="modal" data-bs-target="#task-modal">
                         <i class="fa-solid fa-plus new-task-icon"></i>
                         <span class="new-task-btn-text">New Task</span>
                     </button>
@@ -507,7 +415,7 @@ let createProject = () => {
                         <i class="${x.icon}"></i>
                         <span class="content-header-text"> ${x.name}</span>
                     </div>
-                    <button type="button" class="new-task-btn" data-bs-toggle="modal" data-bs-target="#task-modal">
+                    <button type="button" class="btn new-task-btn" data-bs-toggle="modal" data-bs-target="#task-modal">
                         <i class="fa-solid fa-plus new-task-icon"></i>
                         <span class="new-task-btn-text">New Task</span>
                     </button>
@@ -533,10 +441,73 @@ let createProject = () => {
 };
 
 
+let createTasks = () => {
+    for (let project of projectsData) {
+        let projectName = project["name"].toLowerCase();
+        let projectTasks = document.getElementById(`${projectName}-project-tasks`);
+        projectTasks.innerHTML = "";
+        for (let task of project["tasks"]) {
+            tasksData.map((x, y) => {
+                if (task === x.id) {
+                    return (projectTasks.innerHTML += 
+                        `
+                        <div id="${x.id}">
+                            <div class="card-task">
+                                <input type="checkbox" id="task-checkbox">
+                                <div id="task-metadata" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTask-${x.id}" aria-expanded="false" aria-controls="collapseTask-${x.id}">
+                                    <span class="fw-bold">${x.name}</span>
+                                    <span>${x.description}</span>
+                                    <span class="date-text">${x.date}</span>
+                                </div>
+                                <span class="options">
+                                    <i class="fas fa-edit"></i>
+                                    <i class="fas fa-trash-alt"></i>
+                                </span>
+                            </div>
+                            <div class="collapse" id="collapseTask-${x.id}">
+                                <div class="card card-body">
+                                    Some placeholder content for the collapse component. This panel is hidden by default but revealed when the user activates the relevant trigger.
+                                </div>
+                            </div>
+                        </div>
+                        `
+                    );
+                    // <p>
+                    //     <a class="btn btn-primary" data-bs-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
+                    //         Link with href
+                    //     </a>
+                    //     <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+                    //         Button with data-bs-target
+                    //     </button>
+                    //     </p>
+                    //     <div class="collapse" id="collapseExample">
+                    //     <div class="card card-body">
+                    //         Some placeholder content for the collapse component. This panel is hidden by default but revealed when the user activates the relevant trigger.
+                    //     </div>
+                    //     </div>
+                // <span class="options">
+                    // <i onClick="editTask(this)" data-bs-toggle="modal" data-bs-target="#form" class="fas fa-edit"></i>
+                    // <i onClick="deleteTask(this);createTasks(this)" class="fas fa-trash-alt"></i>
+                // </span>
+                };
+            });
+        };
+    };
+};
+
+
 let resetProjectForm = () => {
     projectNameTextInput.value = "";
 }
 
+
+let resetTaskForm = () => {
+    taskNameInput.value = "";
+    taskDateInput.value = ""; 
+    taskDescription.value = "";
+    taskPriority.value = "";
+    taskProject.value = "";
+};
 
 // FOOTER SECTION
 const footerSection = document.createElement('footer');
@@ -559,7 +530,7 @@ app.append(footerSection);
     tasksData = JSON.parse(localStorage.getItem("tasksData")) || [];
     createProjectButton();
     createProject();
-    console.log(projectsData);
+    createTasks();
     let inbox = document.getElementById('inbox-project');
     inbox.style.display = "block";
 

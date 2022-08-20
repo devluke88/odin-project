@@ -3,6 +3,7 @@
   --dark-grey: #3A3A3C;
   --grey: #8E8E93;
   --light-grey: #f2f5f7;
+  --bb-grey: #f0f0f0;
   --another-gray: #dee2e6;
   --ligt-yellow: #fff4e6;
   --white: #fff;
@@ -163,6 +164,7 @@ body {
 .new-task-btn {
   color: var(--grey);
   padding: 10px;
+  margin-bottom: 10px;
 }
 
 .new-task-btn-text {
@@ -173,6 +175,37 @@ body {
   cursor: pointer;
   color: var(--purple);
 }
+
+.card-task {
+  color: var(--dark-grey);
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 10px;
+  margin-bottom: 10px;
+  border-bottom: 1px solid var(--bb-grey);
+}
+
+#task-checkbox {
+  margin-top: 5px;
+}
+
+#task-metadata {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+}
+
+.date-text {
+  color: var(--red);
+  font-size: small;
+}
+
+
+/* .options {
+  align-self: flex-start;
+} */
 
 /* SIDEBAR */
 #sidebar {
