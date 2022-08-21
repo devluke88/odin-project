@@ -12,6 +12,7 @@
   --green: #28CD41;
   --purple: #BF5AF2;
   --dark-purple: #b23bed;
+  --blue: #007AFF;
 }
   
 *, ::after, ::before {
@@ -202,6 +203,32 @@ body {
   font-size: small;
 }
 
+.card-body {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.left, .right {
+  display: flex;
+  flex-direction: column;
+}
+
+.fa-edit, .fa-trash-alt {
+  cursor: pointer;
+}
+
+.low {
+  color: var(--blue);
+}
+
+.medium {
+  color: var(--orange);
+}
+
+.high {
+  color: var(--red);
+}
 
 /* .options {
   align-self: flex-start;

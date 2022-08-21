@@ -160,6 +160,7 @@ projectsElements.appendChild(customProjectsContainer);
 
 // Global Event Listener
 document.addEventListener('click',function(e){
+    // Catch custom project clicks
     let customProjectsContainer = document.querySelectorAll('.custom-project');
     for (let element of customProjectsContainer) {
         if (e.target && e.target.id == element.id || e.target.parentElement.id == element.id){
@@ -167,6 +168,25 @@ document.addEventListener('click',function(e){
             break
         }
     }
+    // Catch edit task clicks
+    let editTasks = document.querySelectorAll('#edit-task');
+    for (let taskItem of editTasks) {
+        // console.log(`Item: ${item}`);
+        if (e.target.dataset.editId === taskItem.dataset.editId) {
+            console.log(`Edit: ${e.target.dataset.editId}`);
+            // Open edit form
+        }
+    };
+    // Catch delete task clicks
+    let deleteTasks = document.querySelectorAll('#delete-task');
+    for (let deleteItem of deleteTasks) {
+        // console.log(`Item: ${item}`);
+        if (e.target.dataset.deleteId === deleteItem.dataset.deleteId) {
+            console.log(`Delete: ${e.target.dataset.deleteId}`);
+            // Delete item
+        }
+    };
+
 });
 
 projectsElements.innerHTML += `
@@ -198,7 +218,7 @@ mainSection.append(contentElement);
 app.append(mainSection);
 
 
-// Project Modal
+// Create Project Modal
 mainSection.innerHTML+=`
 <form class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog">
@@ -221,7 +241,7 @@ mainSection.innerHTML+=`
 </form>
 `
 
-// Task Modal
+// Create Task Modal
 mainSection.innerHTML+=`
 <form class="modal fade" id="task-modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog">
@@ -248,7 +268,7 @@ mainSection.innerHTML+=`
         <div class="mb-3">
             <label>Priority: </label>
             <select id="task-priority" class="form-select" aria-label="Default select priority">
-                <option selected value="1">Low</option>
+                <option value="1">Low</option>
                 <option value="2">Medium</option>
                 <option value="3">High</option>
             </select> 
@@ -266,6 +286,13 @@ mainSection.innerHTML+=`
   </div>
 </form>
 `
+
+// Edit Task Modal
+mainSection.innerHTML+=``
+// TODO-1 - add new form
+// Associate it with the edit button - add event listener, move task
+// TODO-2 - delete project 
+// TODO-3 - delete task
 
 let projectModal = document.getElementById('exampleModal');
 let projectMsg = document.getElementById('project-msg');
@@ -456,39 +483,30 @@ let createTasks = () => {
                                 <input type="checkbox" id="task-checkbox">
                                 <div id="task-metadata" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTask-${x.id}" aria-expanded="false" aria-controls="collapseTask-${x.id}">
                                     <span class="fw-bold">${x.name}</span>
-                                    <span>${x.description}</span>
+                                    <span class="small text-secondary">${x.description}</span>
                                     <span class="date-text">${x.date}</span>
                                 </div>
                                 <span class="options">
-                                    <i class="fas fa-edit"></i>
-                                    <i class="fas fa-trash-alt"></i>
+                                    <i class="fas fa-flag ${x.priority.toLowerCase()}"></i>
+                                    <i class="fas fa-edit" id="edit-task" data-edit-id="${y}"></i>
+                                    <i class="fas fa-trash-alt" id="delete-task" data-delete-id="${y}"></i>
                                 </span>
                             </div>
                             <div class="collapse" id="collapseTask-${x.id}">
                                 <div class="card card-body">
-                                    Some placeholder content for the collapse component. This panel is hidden by default but revealed when the user activates the relevant trigger.
+                                    <div class="left">
+                                        <span><strong>Name: </strong>${x.name}</span>
+                                        <span><strong>Description: </strong>${x.description}</span>
+                                    </div>
+                                    <div class="right">
+                                        <span><strong>Due date: </strong>${x.date}</span>
+                                        <span><strong>Priority: </strong>${x.priority}</span>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                         `
-                    );
-                    // <p>
-                    //     <a class="btn btn-primary" data-bs-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
-                    //         Link with href
-                    //     </a>
-                    //     <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
-                    //         Button with data-bs-target
-                    //     </button>
-                    //     </p>
-                    //     <div class="collapse" id="collapseExample">
-                    //     <div class="card card-body">
-                    //         Some placeholder content for the collapse component. This panel is hidden by default but revealed when the user activates the relevant trigger.
-                    //     </div>
-                    //     </div>
-                // <span class="options">
-                    // <i onClick="editTask(this)" data-bs-toggle="modal" data-bs-target="#form" class="fas fa-edit"></i>
-                    // <i onClick="deleteTask(this);createTasks(this)" class="fas fa-trash-alt"></i>
-                // </span>
+                    ); 
                 };
             });
         };
