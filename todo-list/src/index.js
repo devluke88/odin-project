@@ -353,10 +353,10 @@ let taskFormValidation = () => {
 
 let acceptTaskData = () => {    
     let taskEnteredPriority = "Low";
-    if (taskPriority.value === 2) {
+    if (taskPriority.value === "2") {
         taskEnteredPriority = "Medium";
     }
-    else if (taskPriority.value === 3) {
+    else if (taskPriority.value === "3") {
         taskEnteredPriority = "High";
     }
     let taskUUID = uuidv4();
