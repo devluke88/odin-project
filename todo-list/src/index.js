@@ -180,14 +180,13 @@ document.addEventListener('click',function(e){
     // Catch delete task clicks
     let deleteTasks = document.querySelectorAll('#delete-task');
     for (let deleteItem of deleteTasks) {
-        // console.log(`Item: ${item}`);
         if (e.target.dataset.deleteId === deleteItem.dataset.deleteId) {
-            console.log(`Delete: ${e.target.dataset.deleteId}`);
-            // Delete item
-        }
+            deleteTask(e);
+        };
     };
 
 });
+
 
 projectsElements.innerHTML += `
 <button type="button" class="custom-project-button" data-bs-toggle="modal" data-bs-target="#exampleModal">
@@ -288,7 +287,50 @@ mainSection.innerHTML+=`
 `
 
 // Edit Task Modal
-mainSection.innerHTML+=``
+mainSection.innerHTML+=`
+<form class="modal fade" id="edit-task-modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Edit Task</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="mb-3">
+            <label>Name: </Label>
+            <input class="form-control" type="text" name="" id="edit-task-name-input">
+            <div id="edit-task-msg">
+            </div>
+        </div>
+        <div class="mb-3">
+            <label>Due Date: </label>
+            <input class="form-control" type="date" name="" id="edit-task-date-input">
+        </div>
+        <div class="mb-3">
+            <label>Description: </label>
+            <textarea class="form-control"  name="" id="edit-task-description" cols="30" rows="5"></textarea>
+        </div>
+        <div class="mb-3">
+            <label>Priority: </label>
+            <select id="edit-task-priority" class="form-select" aria-label="Default select priority">
+                <option value="1">Low</option>
+                <option value="2">Medium</option>
+                <option value="3">High</option>
+            </select> 
+        </div>
+        <div class="mb-3">
+            <label>Project: </label>
+            <select id="edit-task-project" class="form-select project-select" aria-label="Default select project">
+            </select>     
+        </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-primary" id="update-task">Update Task</button>
+      </div>
+    </div>
+  </div>
+</form>
+`
 // TODO-1 - add new form
 // Associate it with the edit button - add event listener, move task
 // TODO-2 - delete project 
@@ -514,6 +556,22 @@ let createTasks = () => {
 };
 
 
+let deleteTask = (e) => {
+    let selectedTask = e.target.parentElement.parentElement.parentElement;
+    tasksData.splice(selectedTask.id, 1);
+    localStorage.setItem("tasksData", JSON.stringify(tasksData));
+    for (let project of projectsData) {
+        for (let task of project.tasks) {
+            if (task === selectedTask.id) {
+                project.tasks.splice(selectedTask.id, 1);
+            };
+        };
+    localStorage.setItem("projectsData", JSON.stringify(projectsData));   
+    };
+    selectedTask.remove();
+};
+
+
 let resetProjectForm = () => {
     projectNameTextInput.value = "";
 }
@@ -526,6 +584,7 @@ let resetTaskForm = () => {
     taskPriority.value = "";
     taskProject.value = "";
 };
+
 
 // FOOTER SECTION
 const footerSection = document.createElement('footer');
