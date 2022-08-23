@@ -558,7 +558,11 @@ let createTasks = () => {
 
 let deleteTask = (e) => {
     let selectedTask = e.target.parentElement.parentElement.parentElement;
-    tasksData.splice(selectedTask.id, 1);
+    for (let task of tasksData) {
+        if (task.id === selectedTask.id) {
+            tasksData.splice(selectedTask.id, 1);
+        };
+    };
     localStorage.setItem("tasksData", JSON.stringify(tasksData));
     for (let project of projectsData) {
         for (let task of project.tasks) {
