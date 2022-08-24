@@ -173,8 +173,7 @@ document.addEventListener('click',function(e){
     for (let taskItem of editTasks) {
         // console.log(`Item: ${item}`);
         if (e.target.dataset.editId === taskItem.dataset.editId) {
-            console.log(`Edit: ${e.target.dataset.editId}`);
-            // Open edit form
+            editTask(e);
         }
     };
     // Catch delete task clicks
@@ -331,10 +330,6 @@ mainSection.innerHTML+=`
   </div>
 </form>
 `
-// TODO-1 - add new form
-// Associate it with the edit button - add event listener, move task
-// TODO-2 - delete project 
-// TODO-3 - delete task
 
 let projectModal = document.getElementById('exampleModal');
 let projectMsg = document.getElementById('project-msg');
@@ -350,6 +345,13 @@ let taskPriority = document.getElementById('task-priority');
 let taskProject = document.getElementById('task-project');
 let addTask = document.getElementById('add-task');
 let taskMsg = document.getElementById('task-msg');
+
+// Fields for editing tasks
+let editTaskNameInput = document.getElementById('edit-task-name-input');
+let editTaskDateInput = document.getElementById('edit-task-date-input');
+let editTaskDescription = document.getElementById('edit-task-description');
+let editTaskPriority = document.getElementById('edit-task-priority');
+let editTaskProject = document.getElementById('edit-task-project');
 
 // Project and task stores
 let projectsData = []
@@ -530,19 +532,27 @@ let createTasks = () => {
                                 </div>
                                 <span class="options">
                                     <i class="fas fa-flag ${x.priority.toLowerCase()}"></i>
-                                    <i class="fas fa-edit" id="edit-task" data-edit-id="${y}"></i>
+                                    <i class="fas fa-edit" id="edit-task" data-edit-id="${y}" data-task-id="${x.id}" data-bs-toggle="modal" data-bs-target="#edit-task-modal"></i>
                                     <i class="fas fa-trash-alt" id="delete-task" data-delete-id="${y}"></i>
                                 </span>
                             </div>
                             <div class="collapse" id="collapseTask-${x.id}">
                                 <div class="card card-body">
                                     <div class="left">
-                                        <span><strong>Name: </strong>${x.name}</span>
-                                        <span><strong>Description: </strong>${x.description}</span>
+                                        <div>
+                                            <strong>Name: </strong><span>${x.name}</span>
+                                        </div>
+                                        <div>
+                                            <strong>Description: </strong><span>${x.description}</span>
+                                        </div>
                                     </div>
                                     <div class="right">
-                                        <span><strong>Due date: </strong>${x.date}</span>
-                                        <span><strong>Priority: </strong>${x.priority}</span>
+                                        <div>
+                                            <strong>Due date: </strong><span>${x.date}</span>
+                                        </div>
+                                        <div>
+                                            <strong>Priority: </strong><span>${x.priority}</span>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -573,6 +583,52 @@ let deleteTask = (e) => {
     localStorage.setItem("projectsData", JSON.stringify(projectsData));   
     };
     selectedTask.remove();
+};
+
+// Helper function to locate value of the option element
+let findSelectedValue = (item, searchedValue) => {
+    for (let x of item.children) { 
+        if (x.textContent === searchedValue) {
+            console.log(`Value: ${x.value}`);
+            return x.value - 1;
+        }
+    }
+};
+
+let editTask = (e) => {
+    let selectedTask = e.target.dataset.taskId;
+    // Populate data with all projects
+    editTaskProject.innerHTML = "";
+    let counter = 0
+    for (let prj of projectsData) {
+        console.log(`Test: ${prj}`)
+        editTaskProject.innerHTML += `
+        <option value="${counter}">${prj.name}</option>
+        `
+        counter += 1;
+    }
+    
+    for (let item of tasksData) {
+        if (item.id === selectedTask) {
+            editTaskNameInput.value = item.name;
+            editTaskDateInput.value = item.date;
+            editTaskDescription.value = item.description;
+            
+            editTaskPriority.selectedIndex = findSelectedValue(editTaskPriority, item.priority);
+            console.log(`Priority: ${editTaskPriority}`)
+            editTaskProject.selectedIndex = findSelectedValue(editTaskProject, item.project);
+            console.log(`Project: ${editTaskProject}`)
+        }
+    }
+    // console.log(selectedTask.children[0].children[0].children[1].textContent);
+    // console.log(selectedTask.children[1].children[0].innerText);
+    // editTaskNameInput.value = selectedTask.children[0].children[0].children[1].textContent;
+    // editTaskDateInput.value = selectedTask.children[0].children[0].children[1].textContent;
+    // editTaskDescription.value = selectedTask.children[0].children[1].children[1].textContent
+    // editTaskPriority.value = selectedTask;
+    // editTaskProject.value = selectedTask;
+    
+    // deleteTask(e);
 };
 
 
