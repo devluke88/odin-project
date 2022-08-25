@@ -347,6 +347,7 @@ let addTask = document.getElementById('add-task');
 let taskMsg = document.getElementById('task-msg');
 
 // Fields for editing tasks
+let editTaskModal = document.getElementById('edit-task-modal');
 let editTaskNameInput = document.getElementById('edit-task-name-input');
 let editTaskDateInput = document.getElementById('edit-task-date-input');
 let editTaskDescription = document.getElementById('edit-task-description');
@@ -411,7 +412,8 @@ let acceptTaskData = () => {
         date: taskDateInput.value,
         description: taskDescription.value,
         priority: taskEnteredPriority,
-        project: taskProject.value
+        project: taskProject.value,
+        project_name: taskProject.value
     });
     localStorage.setItem("tasksData", JSON.stringify(tasksData));
     for (let element of projectsData) {
@@ -589,45 +591,32 @@ let deleteTask = (e) => {
 let findSelectedValue = (item, searchedValue) => {
     for (let x of item.children) { 
         if (x.textContent === searchedValue) {
-            console.log(`Value: ${x.value}`);
             return x.value - 1;
-        }
-    }
+        };
+    };
 };
+
 
 let editTask = (e) => {
     let selectedTask = e.target.dataset.taskId;
     // Populate data with all projects
     editTaskProject.innerHTML = "";
-    let counter = 0
     for (let prj of projectsData) {
-        console.log(`Test: ${prj}`)
         editTaskProject.innerHTML += `
-        <option value="${counter}">${prj.name}</option>
-        `
-        counter += 1;
-    }
+        <option value="${prj.id}">${prj.name}</option>
+        `;
+    };
     
     for (let item of tasksData) {
         if (item.id === selectedTask) {
             editTaskNameInput.value = item.name;
             editTaskDateInput.value = item.date;
             editTaskDescription.value = item.description;
-            
             editTaskPriority.selectedIndex = findSelectedValue(editTaskPriority, item.priority);
-            console.log(`Priority: ${editTaskPriority}`)
-            editTaskProject.selectedIndex = findSelectedValue(editTaskProject, item.project);
-            console.log(`Project: ${editTaskProject}`)
-        }
-    }
-    // console.log(selectedTask.children[0].children[0].children[1].textContent);
-    // console.log(selectedTask.children[1].children[0].innerText);
-    // editTaskNameInput.value = selectedTask.children[0].children[0].children[1].textContent;
-    // editTaskDateInput.value = selectedTask.children[0].children[0].children[1].textContent;
-    // editTaskDescription.value = selectedTask.children[0].children[1].children[1].textContent
-    // editTaskPriority.value = selectedTask;
-    // editTaskProject.value = selectedTask;
-    
+            editTaskProject.value = item.project;
+        };
+    };
+    // TODO: Should I delete task straigh away or check first if form was submitted?
     // deleteTask(e);
 };
 
@@ -673,12 +662,24 @@ app.append(footerSection);
 
 })();
 
-projectModal.addEventListener('submit', (e)=>{
+projectModal.addEventListener('submit', (e) => {
     e.preventDefault();
     projectFormValidation();
 })
 
-taskModal.addEventListener('submit', (e)=>{
+taskModal.addEventListener('submit', (e) => {
     e.preventDefault();
     taskFormValidation();
-})
+});
+
+editTaskModal.addEventListener('submit', (e) => {
+    e.preventDefault();
+    // CONTINUE - 26/08/2022
+    // editFormValidation();
+});
+
+
+// TODO:
+// 1. Finish editTaskForm to update the task
+// 2. Add Completed Projects - task to be moved to completed when checked
+// 3. Maybe allow option to delete projects
