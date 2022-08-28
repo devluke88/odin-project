@@ -230,6 +230,10 @@ body {
   color: var(--red);
 }
 
+#edit-task-id-info {
+  display: none;
+}
+
 /* .options {
   align-self: flex-start;
 } */

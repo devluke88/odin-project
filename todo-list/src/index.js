@@ -2,9 +2,6 @@ import './style.css';
 import { projectModule, customProject } from './project'
 import { sidebarModule } from './sidebar'
 import { navbarModule } from './navbar'
-// import { modalModule } from './modal'
-
-let todoList = [];
 
 // Function to generate unique id for the task
 function uuidv4() {
@@ -49,8 +46,7 @@ function takeMeHome(e) {
 // Array with sidebar menu components
 let defaultProjectsData = [
     {name: 'Inbox', icon: 'fa-solid fa-inbox'},
-    {name: 'Today', icon: 'fa-solid fa-calendar-day'},
-    // {name: 'Projects', icon: 'fa-solid fa-code-branch'},
+    {name: 'Completed', icon: 'fa-solid fa-clipboard-list'},
     // {name: 'Completed', icon: 'fa-solid fa-circle-check'},
     // {name: 'All', icon: 'fa-solid fa-list'},
 ]
@@ -85,7 +81,7 @@ let mainContent = document.getElementsByClassName('content');
 
 // Show given project content
 let showProject = (e) => {
-    // Get the id of the project, for example inbox, today, test ...
+    // Get the id of the project, for example inbox, completed, test ...
     let projectID = ""
     if (e.target.id === "") {
         projectID = e.target.parentElement.id
@@ -120,7 +116,6 @@ sidebarProjects.forEach(item => {
     })
 });
 
-let customProjectsData = {}
 
 // Collapsible Projects button
 const projectsBtn = document.createElement('button');
@@ -158,20 +153,19 @@ customProjectBtn.appendChild(customProjectTxt);
 customProjectsContainer.appendChild(customProjectBtn);
 projectsElements.appendChild(customProjectsContainer);
 
-// Global Event Listener
+// Global Event Listener on click
 document.addEventListener('click',function(e){
     // Catch custom project clicks
     let customProjectsContainer = document.querySelectorAll('.custom-project');
     for (let element of customProjectsContainer) {
         if (e.target && e.target.id == element.id || e.target.parentElement.id == element.id){
             showProject(e);
-            break
+            break;
         }
     }
     // Catch edit task clicks
     let editTasks = document.querySelectorAll('#edit-task');
     for (let taskItem of editTasks) {
-        // console.log(`Item: ${item}`);
         if (e.target.dataset.editId === taskItem.dataset.editId) {
             editTask(e);
         }
@@ -186,6 +180,14 @@ document.addEventListener('click',function(e){
 
 });
 
+// Global Event Listener on change
+document.addEventListener('change', (event) => {
+  if (event.target.checked) {
+    console.log('Completed');
+  } else {
+    console.log('not checked');
+  }
+});
 
 projectsElements.innerHTML += `
 <button type="button" class="custom-project-button" data-bs-toggle="modal" data-bs-target="#exampleModal">
@@ -322,6 +324,7 @@ mainSection.innerHTML+=`
             <select id="edit-task-project" class="form-select project-select" aria-label="Default select project">
             </select>     
         </div>
+        <div id="edit-task-id-info"></div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
         <button type="submit" class="btn btn-primary" id="update-task">Update Task</button>
@@ -353,6 +356,9 @@ let editTaskDateInput = document.getElementById('edit-task-date-input');
 let editTaskDescription = document.getElementById('edit-task-description');
 let editTaskPriority = document.getElementById('edit-task-priority');
 let editTaskProject = document.getElementById('edit-task-project');
+let updateTask = document.getElementById('update-task');
+let editTaskMsg = document.getElementById('edit-task-msg');
+let editTaskIdInfo = document.getElementById('edit-task-id-info');
 
 // Project and task stores
 let projectsData = []
@@ -396,6 +402,66 @@ let taskFormValidation = () => {
 };
 
 
+let editTaskFormValidation = () => {
+    if (editTaskNameInput.value === "") {
+        editTaskMsg.innerHTML = 'Task name is required.'
+    }
+    else {
+        editTaskMsg.innerHTML = "";
+        acceptEditedTaskData();
+        updateTask.setAttribute("data-bs-dismiss", 'modal');
+        updateTask.click();
+        
+        (() => {
+            updateTask.setAttribute("data-bs-dismiss", '');
+        })();
+    }
+};
+
+
+let acceptEditedTaskData = () => {    
+    let taskEnteredPriority = "Low";
+    if (editTaskPriority.value === "2") {
+        taskEnteredPriority = "Medium";
+    }
+    else if (editTaskPriority.value === "3") {
+        taskEnteredPriority = "High";
+    };
+    let editedTask = editTaskIdInfo.innerHTML;
+    let taskObj = tasksData.findIndex((obj => obj.id === `${editedTask}`));
+    let oldProjectId = tasksData[taskObj].project;
+    // Update task data
+    tasksData[taskObj].name = editTaskNameInput.value;
+    tasksData[taskObj].date = editTaskDateInput.value;
+    tasksData[taskObj].description = editTaskDescription.value;
+    tasksData[taskObj].priority = taskEnteredPriority;
+    // Add function to delete task from project and add to a new one
+    tasksData[taskObj].project = editTaskProject.value;
+    localStorage.setItem("tasksData", JSON.stringify(tasksData));
+    // Check if project field has been updated
+    if (oldProjectId != editTaskProject.value) {
+        // Remove record from the old project
+        for (let element of projectsData) {
+            if (element.id === oldProjectId) {
+                element.tasks.splice(tasksData[taskObj].id, 1);
+            };
+        };
+        // Add record in a new project
+        for (let record of projectsData) {
+            if (record.id === editTaskProject.value) {
+                record["tasks"].push(tasksData[taskObj].id);
+            };
+        };
+        localStorage.setItem("projectsData", JSON.stringify(projectsData));
+    };
+    
+    
+    
+    createTasks();
+    resetEditTaskForm();
+};
+
+
 let acceptTaskData = () => {    
     let taskEnteredPriority = "Low";
     if (taskPriority.value === "2") {
@@ -413,7 +479,6 @@ let acceptTaskData = () => {
         description: taskDescription.value,
         priority: taskEnteredPriority,
         project: taskProject.value,
-        project_name: taskProject.value
     });
     localStorage.setItem("tasksData", JSON.stringify(tasksData));
     for (let element of projectsData) {
@@ -444,7 +509,7 @@ let createProjectButton = () => {
     customPrjContainer.innerHTML = "";
     projectsData.map((x, y) => {
         // Skip creating inbox button
-        if (x.name !== "Inbox" && x.name !== "Today") {
+        if (x.name !== "Inbox" && x.name !== "Completed") {
             return (customPrjContainer.innerHTML +=
                 `
                 <button class="custom-project ${y}" id="${x.name.toLowerCase()}">
@@ -462,7 +527,7 @@ let createProjectButton = () => {
 let createProject = () => {
     content.innerHTML = "";
     projectsData.map((x, y) => {
-        if (x.name !== "Inbox" && x.name !== "Today" ) {
+        if (x.name !== "Inbox" && x.name !== "Completed") {
             return (content.innerHTML += 
                 `
                 <div id="${x.name.toLowerCase()}-project" class="custom-project-${y}" style="display: none;">
@@ -470,7 +535,7 @@ let createProject = () => {
                         <i class="true"></i>
                         <span class="content-header-text"> ${x.name}</span>
                     </div>
-                    <button type="button" class="btn new-task-btn" data-bs-toggle="modal" data-bs-target="#task-modal">
+                    <button type="button" class="btn new-task-btn" data-task-id="${x.id}" data-bs-toggle="modal" data-bs-target="#task-modal">
                         <i class="fa-solid fa-plus new-task-icon"></i>
                         <span class="new-task-btn-text">New Task</span>
                     </button>
@@ -480,6 +545,20 @@ let createProject = () => {
                 `
             );   
         }
+        else if (x.name === "Completed") {
+            return (content.innerHTML +=
+                `
+                <div id="${x.name.toLowerCase()}-project" class="default-project-${y}" style="display: none;">
+                    <div class="content-header">
+                        <i class="${x.icon}"></i>
+                        <span class="content-header-text"> ${x.name}</span>
+                    </div>
+                    <div id="${x.name.toLowerCase()}-project-tasks">
+                    </div>
+                </div>
+                `
+            );
+        }
         else {
             return (content.innerHTML +=
                 `
@@ -488,7 +567,7 @@ let createProject = () => {
                         <i class="${x.icon}"></i>
                         <span class="content-header-text"> ${x.name}</span>
                     </div>
-                    <button type="button" class="btn new-task-btn" data-bs-toggle="modal" data-bs-target="#task-modal">
+                    <button type="button" class="btn new-task-btn" data-task-id="${x.id}" data-bs-toggle="modal" data-bs-target="#task-modal">
                         <i class="fa-solid fa-plus new-task-icon"></i>
                         <span class="new-task-btn-text">New Task</span>
                     </button>
@@ -497,19 +576,19 @@ let createProject = () => {
                 </div>
                 `
             );
-        }  
+        };
     });
     resetProjectForm();
     taskProject.innerHTML = "";
     projectsData.map((x, y) => {
-        if (x.name !== "Today") {
+        if (x.name !== "Completed") {
             return(
                 taskProject.innerHTML += 
                 `
                 <option value="${x.id}">${x.name}</option>
                 `
             );
-        }
+        };
     });
 };
 
@@ -602,11 +681,12 @@ let editTask = (e) => {
     // Populate data with all projects
     editTaskProject.innerHTML = "";
     for (let prj of projectsData) {
-        editTaskProject.innerHTML += `
-        <option value="${prj.id}">${prj.name}</option>
-        `;
+        if (prj.name !== "Completed") {
+            editTaskProject.innerHTML += `
+            <option value="${prj.id}">${prj.name}</option>
+            `;
+        };
     };
-    
     for (let item of tasksData) {
         if (item.id === selectedTask) {
             editTaskNameInput.value = item.name;
@@ -614,6 +694,7 @@ let editTask = (e) => {
             editTaskDescription.value = item.description;
             editTaskPriority.selectedIndex = findSelectedValue(editTaskPriority, item.priority);
             editTaskProject.value = item.project;
+            editTaskIdInfo.innerHTML = item.id;
         };
     };
     // TODO: Should I delete task straigh away or check first if form was submitted?
@@ -630,8 +711,20 @@ let resetTaskForm = () => {
     taskNameInput.value = "";
     taskDateInput.value = ""; 
     taskDescription.value = "";
-    taskPriority.value = "";
+    taskPriority.value = "1";
     taskProject.value = "";
+    taskMsg.value = "";
+};
+
+
+let resetEditTaskForm = () => {
+    editTaskNameInput.value = "";
+    editTaskDateInput.value = ""; 
+    editTaskDescription.value = "";
+    editTaskPriority.value = "1";
+    editTaskProject.value = "";
+    editTaskMsg.value = "";
+    editTaskIdInfo.innerHTML = "";
 };
 
 
@@ -642,17 +735,8 @@ footerSection.innerHTML = 'Copyright © Lukasz 2022 <a href="#"><i class="fa-bra
 app.append(footerSection);
 
 
-// TODO-4:
-// You should separate your application logic (i.e. creating new todos, setting todos as complete, changing todo priority etc.) from the DOM-related stuff, so keep all of those things in separate modules.
-
-// TODO-5:
-// The look of the User Interface is up to you, but it should be able to do the following:
-// a. view all projects
-// b. view all todos in each project (probably just the title and duedate.. perhaps changing color for different priorities)
-// c. expand a single todo to see/edit its details
-// d. delete a todo
 (() => {
-    projectsData = JSON.parse(localStorage.getItem("projectsData")) || [{id: uuidv4(), name: "Inbox", icon: "fa-solid fa-inbox", tasks: []}, {id: uuidv4(), name: "Today", icon: "fa-solid fa-calendar-day", tasks: []}];
+    projectsData = JSON.parse(localStorage.getItem("projectsData")) || [{id: uuidv4(), name: "Inbox", icon: "fa-solid fa-inbox", tasks: []}, {id: uuidv4(), name: "Completed", icon: "fa-solid fa-calendar-day", tasks: []}];
     tasksData = JSON.parse(localStorage.getItem("tasksData")) || [];
     createProjectButton();
     createProject();
@@ -674,12 +758,9 @@ taskModal.addEventListener('submit', (e) => {
 
 editTaskModal.addEventListener('submit', (e) => {
     e.preventDefault();
-    // CONTINUE - 26/08/2022
-    // editFormValidation();
+    editTaskFormValidation();
 });
 
 
 // TODO:
-// 1. Finish editTaskForm to update the task
-// 2. Add Completed Projects - task to be moved to completed when checked
-// 3. Maybe allow option to delete projects
+// LAST: Add Completed Projects - task to be moved to completed when checked
