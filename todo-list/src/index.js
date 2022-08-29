@@ -1,5 +1,5 @@
 import './style.css';
-import { projectModule, customProject } from './project'
+// import { projectModule, customProject } from './project'
 import { sidebarModule } from './sidebar'
 import { navbarModule } from './navbar'
 
@@ -46,9 +46,7 @@ function takeMeHome(e) {
 // Array with sidebar menu components
 let defaultProjectsData = [
     {name: 'Inbox', icon: 'fa-solid fa-inbox'},
-    {name: 'Completed', icon: 'fa-solid fa-clipboard-list'},
-    // {name: 'Completed', icon: 'fa-solid fa-circle-check'},
-    // {name: 'All', icon: 'fa-solid fa-list'},
+    {name: 'Completed', icon: 'fa-solid fa-circle-check'},
 ]
 
 // APP
@@ -154,21 +152,21 @@ customProjectsContainer.appendChild(customProjectBtn);
 projectsElements.appendChild(customProjectsContainer);
 
 // Global Event Listener on click
-document.addEventListener('click',function(e){
+document.addEventListener('click', function(e) {
     // Catch custom project clicks
     let customProjectsContainer = document.querySelectorAll('.custom-project');
     for (let element of customProjectsContainer) {
         if (e.target && e.target.id == element.id || e.target.parentElement.id == element.id){
             showProject(e);
             break;
-        }
-    }
+        };
+    };
     // Catch edit task clicks
     let editTasks = document.querySelectorAll('#edit-task');
     for (let taskItem of editTasks) {
         if (e.target.dataset.editId === taskItem.dataset.editId) {
             editTask(e);
-        }
+        };
     };
     // Catch delete task clicks
     let deleteTasks = document.querySelectorAll('#delete-task');
@@ -177,26 +175,63 @@ document.addEventListener('click',function(e){
             deleteTask(e);
         };
     };
-
 });
+
+// Helper function to retrieve id of the project id
+let getProjectId = (projectName) => {
+    for (let projectRow of projectsData) {
+        if (projectRow.name === projectName) {
+            console.log(`ID of project ${projectName} retrieved: ${projectRow.id}`);
+            return projectRow.id;
+        }
+    };
+};
+
 
 // Global Event Listener on change
 document.addEventListener('change', (event) => {
   if (event.target.checked) {
-    console.log('Completed');
+    let searchedTask = event.target.parentElement.parentElement.id;
+    let oldProjectID = "";
+    // Action to move task to completed
+    for (let taskDataInfo of tasksData) {
+        if (taskDataInfo.id === searchedTask) {
+            oldProjectID = taskDataInfo.project;
+            taskDataInfo.project = getProjectId("Completed");
+        };
+    };
+    // Update task store
+    localStorage.setItem("tasksData", JSON.stringify(tasksData));
+     
+     for (let prjRow of projectsData) {
+        // Action to update Completed project tasks
+        if (prjRow.name === "Completed") {
+            prjRow["tasks"].push(searchedTask);
+        }
+        // Action to remove task from the current project
+        if (prjRow.id === oldProjectID) {
+            let isSearchedTask = (element) => element === searchedTask;
+            let indexOfTask = prjRow["tasks"].findIndex(isSearchedTask)
+            prjRow['tasks'].splice(indexOfTask, 1)
+        }
+    };
+    // Update project data
+    localStorage.setItem("projectsData", JSON.stringify(projectsData));
+    createTasks();
   } else {
     console.log('not checked');
   }
 });
 
+// Add project button on the sidebar panel
 projectsElements.innerHTML += `
 <button type="button" class="custom-project-button" data-bs-toggle="modal" data-bs-target="#exampleModal">
     <i class="fa-solid fa-plus"></i>
     <span class="sidebar-element">Add Project</span>
 </button>
-`
+`;
 
-
+// Collapsible menu for Projects tab on the sidebar panel
 projectsBtn.addEventListener('click', collapseProjects);
 
 // Sidebar element event listener
@@ -239,7 +274,7 @@ mainSection.innerHTML+=`
     </div>
   </div>
 </form>
-`
+`;
 
 // Create Task Modal
 mainSection.innerHTML+=`
@@ -285,7 +320,7 @@ mainSection.innerHTML+=`
     </div>
   </div>
 </form>
-`
+`;
 
 // Edit Task Modal
 mainSection.innerHTML+=`
@@ -332,7 +367,7 @@ mainSection.innerHTML+=`
     </div>
   </div>
 </form>
-`
+`;
 
 let projectModal = document.getElementById('exampleModal');
 let projectMsg = document.getElementById('project-msg');
@@ -364,13 +399,13 @@ let editTaskIdInfo = document.getElementById('edit-task-id-info');
 let projectsData = []
 let tasksData = []
 
-
+// Validate project form data
 let projectFormValidation = () => {
     if (projectNameTextInput.value === "") {
         projectMsg.innerHTML = "Project name is required.";
     }
-    else if (projectNameTextInput.value === "Test") {
-        projectMsg.innerHTML = "Project already exists. Choose different name."
+    else if (projectNameTextInput.value === "Main") {
+        projectMsg.innerHTML = "Project name not allowed. Choose different name."
     }
     else {
         projectMsg.innerHTML = "";
@@ -384,7 +419,7 @@ let projectFormValidation = () => {
     }
 };
 
-
+// Validate task form data
 let taskFormValidation = () => {
     if (taskNameInput.value === "") {
         taskMsg.innerHTML = 'Task name is required.'
@@ -401,7 +436,7 @@ let taskFormValidation = () => {
     }
 };
 
-
+// Validate edit task form data
 let editTaskFormValidation = () => {
     if (editTaskNameInput.value === "") {
         editTaskMsg.innerHTML = 'Task name is required.'
@@ -418,7 +453,7 @@ let editTaskFormValidation = () => {
     }
 };
 
-
+// Accept edit data from task and update the store
 let acceptEditedTaskData = () => {    
     let taskEnteredPriority = "Low";
     if (editTaskPriority.value === "2") {
@@ -455,13 +490,11 @@ let acceptEditedTaskData = () => {
         localStorage.setItem("projectsData", JSON.stringify(projectsData));
     };
     
-    
-    
     createTasks();
     resetEditTaskForm();
 };
 
-
+// Accept data from task and update the store
 let acceptTaskData = () => {    
     let taskEnteredPriority = "Low";
     if (taskPriority.value === "2") {
@@ -471,7 +504,6 @@ let acceptTaskData = () => {
         taskEnteredPriority = "High";
     }
     let taskUUID = uuidv4();
-    console.log(`Task: ${taskUUID}`)
     tasksData.push({
         id: taskUUID,
         name: taskNameInput.value,
@@ -491,7 +523,7 @@ let acceptTaskData = () => {
     resetTaskForm();
 };
 
-
+// Accept project data and update the store
 let acceptProjectData = () => {
     projectsData.push({
         id: uuidv4(),
@@ -504,7 +536,7 @@ let acceptProjectData = () => {
     createProject();
 };
 
-
+// Create custom proejects buttons on the sidebar menu
 let createProjectButton = () => {
     customPrjContainer.innerHTML = "";
     projectsData.map((x, y) => {
@@ -523,7 +555,7 @@ let createProjectButton = () => {
     });
 };
 
-
+// Create project UI
 let createProject = () => {
     content.innerHTML = "";
     projectsData.map((x, y) => {
@@ -592,7 +624,7 @@ let createProject = () => {
     });
 };
 
-
+// Create task UI
 let createTasks = () => {
     for (let project of projectsData) {
         let projectName = project["name"].toLowerCase();
@@ -601,52 +633,93 @@ let createTasks = () => {
         for (let task of project["tasks"]) {
             tasksData.map((x, y) => {
                 if (task === x.id) {
-                    return (projectTasks.innerHTML += 
-                        `
-                        <div id="${x.id}">
-                            <div class="card-task">
-                                <input type="checkbox" id="task-checkbox">
-                                <div id="task-metadata" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTask-${x.id}" aria-expanded="false" aria-controls="collapseTask-${x.id}">
-                                    <span class="fw-bold">${x.name}</span>
-                                    <span class="small text-secondary">${x.description}</span>
-                                    <span class="date-text">${x.date}</span>
+                    if (x.project === getProjectId("Completed")) {
+                        return (projectTasks.innerHTML += 
+                            `
+                            <div id="${x.id}">
+                                <div class="card-task">
+                                    <div id="task-metadata" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTask-${x.id}" aria-expanded="false" aria-controls="collapseTask-${x.id}">
+                                        <span class="fw-bold">${x.name}</span>
+                                        <span class="small text-secondary">${x.description}</span>
+                                        <span class="date-text">${x.date}</span>
+                                    </div>
+                                    <span class="options">
+                                        <i class="fas fa-flag ${x.priority.toLowerCase()}"></i>
+                                    </span>
                                 </div>
-                                <span class="options">
-                                    <i class="fas fa-flag ${x.priority.toLowerCase()}"></i>
-                                    <i class="fas fa-edit" id="edit-task" data-edit-id="${y}" data-task-id="${x.id}" data-bs-toggle="modal" data-bs-target="#edit-task-modal"></i>
-                                    <i class="fas fa-trash-alt" id="delete-task" data-delete-id="${y}"></i>
-                                </span>
-                            </div>
-                            <div class="collapse" id="collapseTask-${x.id}">
-                                <div class="card card-body">
-                                    <div class="left">
-                                        <div>
-                                            <strong>Name: </strong><span>${x.name}</span>
+                                <div class="collapse" id="collapseTask-${x.id}">
+                                    <div class="card card-body">
+                                        <div class="left">
+                                            <div>
+                                                <strong>Name: </strong><span>${x.name}</span>
+                                            </div>
+                                            <div>
+                                                <strong>Description: </strong><span>${x.description}</span>
+                                            </div>
                                         </div>
-                                        <div>
-                                            <strong>Description: </strong><span>${x.description}</span>
+                                        <div class="right">
+                                            <div>
+                                                <strong>Due date: </strong><span>${x.date}</span>
+                                            </div>
+                                            <div>
+                                                <strong>Priority: </strong><span>${x.priority}</span>
+                                            </div>
                                         </div>
                                     </div>
-                                    <div class="right">
-                                        <div>
-                                            <strong>Due date: </strong><span>${x.date}</span>
+                                </div>
+                            </div>
+                            `
+                        );
+                    }
+                    else {
+                        return (projectTasks.innerHTML += 
+                            `
+                            <div id="${x.id}">
+                                <div class="card-task">
+                                    <input type="checkbox" id="task-checkbox">
+                                    <div id="task-metadata" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTask-${x.id}" aria-expanded="false" aria-controls="collapseTask-${x.id}">
+                                        <span class="fw-bold">${x.name}</span>
+                                        <span class="small text-secondary">${x.description}</span>
+                                        <span class="date-text">${x.date}</span>
+                                    </div>
+                                    <span class="options">
+                                        <i class="fas fa-flag ${x.priority.toLowerCase()}"></i>
+                                        <i class="fas fa-edit" id="edit-task" data-edit-id="${y}" data-task-id="${x.id}" data-bs-toggle="modal" data-bs-target="#edit-task-modal"></i>
+                                        <i class="fas fa-trash-alt" id="delete-task" data-delete-id="${y}"></i>
+                                    </span>
+                                </div>
+                                <div class="collapse" id="collapseTask-${x.id}">
+                                    <div class="card card-body">
+                                        <div class="left">
+                                            <div>
+                                                <strong>Name: </strong><span>${x.name}</span>
+                                            </div>
+                                            <div>
+                                                <strong>Description: </strong><span>${x.description}</span>
+                                            </div>
                                         </div>
-                                        <div>
-                                            <strong>Priority: </strong><span>${x.priority}</span>
+                                        <div class="right">
+                                            <div>
+                                                <strong>Due date: </strong><span>${x.date}</span>
+                                            </div>
+                                            <div>
+                                                <strong>Priority: </strong><span>${x.priority}</span>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                        `
-                    ); 
+                            `
+                        ); 
+                    }
+                    
                 };
             });
         };
     };
 };
 
-
+// Delete task from UI
 let deleteTask = (e) => {
     let selectedTask = e.target.parentElement.parentElement.parentElement;
     for (let task of tasksData) {
@@ -675,7 +748,7 @@ let findSelectedValue = (item, searchedValue) => {
     };
 };
 
-
+// Populate data in the edit task form
 let editTask = (e) => {
     let selectedTask = e.target.dataset.taskId;
     // Populate data with all projects
@@ -697,26 +770,24 @@ let editTask = (e) => {
             editTaskIdInfo.innerHTML = item.id;
         };
     };
-    // TODO: Should I delete task straigh away or check first if form was submitted?
-    // deleteTask(e);
 };
 
-
+// Make project form fields blank
 let resetProjectForm = () => {
     projectNameTextInput.value = "";
 }
 
-
+// Make task form fields blank
 let resetTaskForm = () => {
     taskNameInput.value = "";
     taskDateInput.value = ""; 
     taskDescription.value = "";
     taskPriority.value = "1";
-    taskProject.value = "";
+    taskProject.value = getProjectId("Inbox");
     taskMsg.value = "";
 };
 
-
+// Make edit task form fields blank
 let resetEditTaskForm = () => {
     editTaskNameInput.value = "";
     editTaskDateInput.value = ""; 
@@ -734,33 +805,31 @@ footerSection.className = 'footer';
 footerSection.innerHTML = 'Copyright © Lukasz 2022 <a href="#"><i class="fa-brands fa-github footer-icon"></i></a>'
 app.append(footerSection);
 
-
+// Load data from local storage on refresh
 (() => {
-    projectsData = JSON.parse(localStorage.getItem("projectsData")) || [{id: uuidv4(), name: "Inbox", icon: "fa-solid fa-inbox", tasks: []}, {id: uuidv4(), name: "Completed", icon: "fa-solid fa-calendar-day", tasks: []}];
+    projectsData = JSON.parse(localStorage.getItem("projectsData")) || [{id: uuidv4(), name: "Inbox", icon: "fa-solid fa-inbox", tasks: []}, {id: uuidv4(), name: "Completed", icon: "fa-solid fa-circle-check", tasks: []}];
     tasksData = JSON.parse(localStorage.getItem("tasksData")) || [];
     createProjectButton();
     createProject();
     createTasks();
     let inbox = document.getElementById('inbox-project');
     inbox.style.display = "block";
-
 })();
 
+// Listener for Add Project button on Add Project form
 projectModal.addEventListener('submit', (e) => {
     e.preventDefault();
     projectFormValidation();
 })
 
+// Listener for Add Task button on Add Task form
 taskModal.addEventListener('submit', (e) => {
     e.preventDefault();
     taskFormValidation();
 });
 
+// Listener for Update Task button on Edit Task form
 editTaskModal.addEventListener('submit', (e) => {
     e.preventDefault();
     editTaskFormValidation();
 });
-
-
-// TODO:
-// LAST: Add Completed Projects - task to be moved to completed when checked
