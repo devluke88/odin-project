@@ -1,6 +1,5 @@
 // Sidebar module
 
-
 const sidebarModule = (components) => {
     const sidebar = document.createElement('div');
     sidebar.id = 'sidebar';
@@ -15,10 +14,7 @@ const sidebarModule = (components) => {
             <span class="sidebar-project-name">${component.name}</span>
         </div>`;
     };
-
     sidebar.appendChild(ul);
-    
-
     return sidebar;
 };
 
